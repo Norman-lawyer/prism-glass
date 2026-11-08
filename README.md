@@ -2,7 +2,9 @@
 
 An Obsidian desktop theme inspired by the sidebar of DeepSeek Harness. It uses Obsidian's built-in styling as its base and adds a translucent sidebar, light and dark colors, and a vertical navigation layout.
 
-> Development preview: the theme and companion plugin are being tested. They have not yet been published in the Obsidian community directory.
+> The theme is prepared for community review. The screenshot shows the optional companion plugin enabled; the file list and another tab are blurred for privacy.
+
+![Prism Glass screenshot](screenshot.png)
 
 ## Requirements
 

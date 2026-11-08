@@ -6,7 +6,7 @@ This directory is a development preview, not a published release. The live vault
 
 - On macOS with Obsidian 1.15, the sidebar header, vertical navigation and file list were displayed with the candidate plugin. A local check was also performed with Minimal Theme Settings disabled; other plugins and snippets were still enabled.
 - Light and dark appearance, the search suggestion popup, a narrower sidebar, and fullscreen layout were checked in the live vault. This is not a clean-install or cross-platform test.
-- With the companion temporarily disabled, the vertical navigation and file list remained visible; the branded header and custom new-note button disappeared. The companion was then re-enabled and the complete sidebar returned. Other plugins and snippets remained active.
+- With the companion temporarily disabled, the vertical navigation and file list remained visible; the custom new-note button disappeared; a later CSS fallback restored the branded header without the plugin. The companion was then re-enabled and the complete sidebar returned. Other plugins and snippets remained active.
 - The companion now obtains its new-note label from Obsidian; Chinese was checked in the live UI and the English label was checked with a simulated command name. A full interface-language switch has not yet been tested.
 - A prior title-reveal fix was confirmed by the user on clipped file names. A repeat hover test after the later theme/plugin changes remains open.
 

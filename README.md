@@ -9,7 +9,7 @@ An Obsidian desktop theme inspired by the sidebar of DeepSeek Harness. It uses O
 ## Requirements
 
 - Obsidian 1.15.0 or later. Testing so far has been on macOS; other platforms have not yet been verified.
-- The companion plugin is optional, but needed for the complete sidebar: it provides the branded header, new-note button, collapsed-sidebar button, and long-file-name reveal. Installing the theme alone does not install the plugin.
+- The companion plugin is optional, but needed for the complete sidebar: it provides the new-note button, collapsed-sidebar button, and long-file-name reveal. Installing the theme alone does not install the plugin.
 - The companion plugin uses Obsidian's localized new-note command label; if unavailable, it falls back to Chinese or English.
 
 ## Manual installation

@@ -1,0 +1,1242 @@
+/*
+Portions of this theme include assets derived from DeepSeek Harness.
+MIT License
+
+Copyright (c) 2026 DeepSeek
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+/* DeepSeek Glass — sidebar styling for Obsidian.
+   Inspired by DeepSeek Harness; see third-party/DeepSeek-Harness-LICENSE. */
+
+/* ============================================================================
+   DeepSeek Glass · sidebar layer
+   ----------------------------------------------------------------------------
+   This layer makes Obsidian's left side dock read like the DeepSeek Harness
+   sidebar: a 14px interface type scale, a 2px row rhythm, 12px rounded rows,
+   and a frosted-glass surface that lets the macOS window material show
+   through (DSH tints that material with a 40% white / 50% ink overlay).
+
+   Values are transcribed from the DSH design tokens:
+     ink        #1b1b1c  #151517     paper      #f9fafb  #fcfdfe
+     secondary  #61666b  #cfd3d6     tertiary   #81858c  #adb2b8
+     hover      #2631480f / #ffffff14
+     active     #2631481a / #ffffff24
+     hairline   #0000001f / #ffffff29
+     radius     12px rows · 8px small controls
+   ============================================================================ */
+
+/* ---------------------------------------------------------------------------
+   1 · Type and rhythm tokens
+   --------------------------------------------------------------------------- */
+
+body {
+  --dsg-font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial,
+    sans-serif;
+  --dsg-radius-sm: 8px;
+  --dsg-radius-md: 12px;
+  --dsg-radius-lg: 16px;
+
+  --dsg-pane-padding: 8px;
+  --dsg-paint-inset: 3px;
+  --dsg-row-padding: 9px;
+  --dsg-row-gap: 6px;
+  --dsg-row-margin: 2px;
+  --dsg-icon: 16px;
+
+  --dsg-text-size: 14px;
+  --dsg-text-line: 20px;
+  --dsg-nav-line: 22px;
+
+  --dsg-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --dsg-speed: 120ms;
+}
+
+.theme-light {
+  --dsg-ink-primary: #0f1115;
+  --dsg-ink-secondary: #61666b;
+  --dsg-ink-tertiary: #81858c;
+  --dsg-ink-caption: #adb2b8;
+
+  --dsg-sidebar-fill: #f9fafb;
+  --dsg-bg-base: #ffffff;
+  --dsg-hover: rgba(38, 49, 72, 0.06);
+  --dsg-active: #2631481a;
+
+  --dsg-hairline: #0000001f;
+  --dsg-hairline-soft: #0000001a;
+
+  --dsg-window-tint: transparent;
+  --dsg-sidebar-glass: linear-gradient(
+      to bottom,
+      rgb(122 155 240 / 0.1),
+      #7a9bf000 35%,
+      #8f89b800 68%,
+      rgb(143 137 184 / 0.09)
+    ),
+    color-mix(in srgb, color-mix(in srgb, #f9fafb 97%, #7a9bf0) 40%, transparent);
+  --dsg-sidebar-solid: color-mix(in srgb, #f9fafb 82%, #eef2f8);
+}
+
+.theme-dark {
+  --dsg-ink-primary: #f9fafb;
+  --dsg-ink-secondary: #cfd3d6;
+  --dsg-ink-tertiary: #adb2b8;
+  --dsg-ink-caption: #81858c;
+
+  --dsg-sidebar-fill: #1b1b1c;
+  --dsg-bg-base: #151517;
+  --dsg-hover: rgba(255, 255, 255, 0.08);
+  --dsg-active: #ffffff24;
+
+  --dsg-hairline: #ffffff29;
+  --dsg-hairline-soft: #ffffff1f;
+
+  /* Harness paints its tint once over the native sidebar material. */
+  --dsg-window-tint: transparent;
+  --dsg-sidebar-glass: linear-gradient(
+      to bottom,
+      rgb(122 155 240 / 0.08),
+      #7a9bf000 35%,
+      #8f89b800 68%,
+      rgb(143 137 184 / 0.07)
+    ),
+    color-mix(in srgb, #1b1b1c 50%, transparent);
+  --dsg-sidebar-solid: color-mix(in srgb, #1b1b1c 88%, #22232a);
+}
+
+
+/* ---------------------------------------------------------------------------
+   1b · Palette continuity
+   The vault used to get its light palette from a "Codex light" snippet. The
+   theme carries those values itself so the notebook side keeps its colours
+   while the sidebar becomes glass. Dark mode follows Obsidian defaults.
+   --------------------------------------------------------------------------- */
+
+.theme-light {
+  --bg1: #ffffff;
+  --bg2: #f9f9f9;
+  --bg3: #eeeeef;
+  --ui1: #e7e7e7;
+  --ui2: #d8d8da;
+  --ui3: #b8b9bc;
+  --tx1: #1a1c1f;
+  --tx2: #66686b;
+  --tx3: #898b8e;
+  --background-primary: #ffffff;
+  --background-primary-alt: #f9f9f9;
+  --background-secondary: #f9f9f9;
+  --background-secondary-alt: #f9f9f9;
+  --background-modifier-border: #e7e7e7;
+  --background-modifier-border-hover: #d8d8da;
+  --background-modifier-hover: rgba(26, 28, 31, 0.05);
+  --text-normal: #1a1c1f;
+  --text-muted: #66686b;
+  --text-faint: #898b8e;
+  --text-selection: rgba(51, 156, 255, 0.18);
+  --titlebar-text-color: #66686b;
+  --tab-background-active: #ffffff;
+  --tab-outline-color: #e7e7e7;
+  --tab-text-color: #66686b;
+  --tab-text-color-active: #1a1c1f;
+  --icon-color: #898b8e;
+  --icon-color-hover: #1a1c1f;
+  --icon-color-active: #1a1c1f;
+  --icon-color-focused: #1a1c1f;
+  --nav-item-color: #66686b;
+  --nav-item-color-hover: #1a1c1f;
+  --nav-item-color-active: #1a1c1f;
+  --nav-item-color-selected: #1a1c1f;
+  --nav-item-background-hover: rgba(26, 28, 31, 0.05);
+  --nav-item-background-active: rgba(26, 28, 31, 0.08);
+  --nav-indentation-guide-color: #e7e7e7;
+  --divider-color: #e7e7e7;
+  --frame-divider-color: #e7e7e7;
+  --inline-title-color: #1a1c1f;
+  --h1-color: #1a1c1f;
+  --h2-color: #1a1c1f;
+  --h3-color: #1a1c1f;
+  --h4-color: #1a1c1f;
+  --h5-color: #1a1c1f;
+  --h6-color: #1a1c1f;
+  --code-background: #f3f3f3;
+  --code-normal: #1a1c1f;
+  --link-color: #1677c8;
+  --link-color-hover: #0d5eaa;
+  --link-external-color: #1677c8;
+  --link-external-color-hover: #0d5eaa;
+  --interactive-normal: #f3f3f3;
+  --interactive-hover: #ededed;
+  --frame-background: #ffffff;
+}
+
+/* ---------------------------------------------------------------------------
+   2 · Frosted glass window material
+   --------------------------------------------------------------------------- */
+
+body.is-translucent {
+  --workspace-background-translucent: var(--dsg-window-tint);
+}
+
+/* Keep the light sidebar readable when the native macOS material is dark. */
+@media (prefers-color-scheme: dark) {
+  body.theme-light.is-translucent {
+    --dsg-window-tint: color-mix(in srgb, #ffffff 80%, transparent);
+  }
+}
+
+/* Approximate the native dark material when the system itself is light. */
+@media (prefers-color-scheme: light) {
+  body.theme-dark.is-translucent:not(.is-fullscreen) {
+    --dsg-window-tint: color-mix(in srgb, #18191c 80%, transparent);
+  }
+  body.theme-dark.is-translucent.is-fullscreen {
+    --dsg-sidebar-glass: linear-gradient(to bottom, rgb(122 155 240 / 0.08), #7a9bf000 35%, #8f89b800 68%, rgb(143 137 184 / 0.07)), color-mix(in srgb, #1b1b1c 85%, transparent);
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .theme-light, .theme-dark,
+  body.theme-dark.is-translucent.is-fullscreen {
+    --dsg-sidebar-glass: color-mix(in srgb, var(--dsg-sidebar-fill) 90%, transparent);
+  }
+}
+
+/* One continuous glass surface for the window chrome. The panes above it are
+   clear, and the note area paints its own opaque paper on top, which keeps the
+   glass free of seams (the traffic-light corner included). */
+body.is-translucent .horizontal-main-container {
+  background: var(--dsg-sidebar-glass) !important;
+  /* The translucent window provides the native macOS blur. Harness applies
+     its sidebar tint on that material without a second CSS backdrop filter. */
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+body.is-translucent .workspace-ribbon.mod-primary,
+body.is-translucent .workspace-ribbon.mod-primary::before,
+body.is-translucent .workspace-split.mod-primary-split,
+body.is-translucent .workspace-split.mod-secondary-split {
+  background: transparent !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* No rule lines inside the glass: the ribbon corner pseudo and the dock tab
+   strips must not draw their own hairlines. */
+body.is-translucent .workspace-ribbon.mod-primary::before,
+body.is-translucent .mod-primary-split .mod-top .workspace-tab-header-container::before,
+body.is-translucent .mod-secondary-split .mod-top .workspace-tab-header-container::before,
+body.is-translucent .mod-primary-split .mod-top .workspace-tab-header-container,
+body.is-translucent .mod-secondary-split .mod-top .workspace-tab-header-container {
+  border-bottom: none !important;
+  border-top: none !important;
+}
+
+/* Hairline between the glass pane and the page (DSH centre column edge). */
+body.is-translucent .workspace-split.mod-primary-split {
+  border-inline-end: 0.5px solid var(--dsg-hairline) !important;
+}
+body.is-translucent .workspace-split.mod-secondary-split {
+  border-inline-start: 0.5px solid var(--dsg-hairline) !important;
+}
+body.is-translucent .workspace-ribbon.mod-primary {
+  border-inline-end: none !important;
+}
+
+/* Nothing inside the glass panes may paint an opaque sheet over the material.
+   These selectors outrank the palette snippets that used to own the sidebar. */
+body.is-translucent:not(.is-mobile) .workspace-split.mod-primary-split .workspace-leaf-content,
+body.is-translucent:not(.is-mobile) .workspace-split.mod-primary-split .view-content,
+body.is-translucent:not(.is-mobile).theme-light .mod-primary-split .mod-top .workspace-tab-header-container,
+body.is-translucent:not(.is-mobile).theme-dark .mod-primary-split .mod-top .workspace-tab-header-container,
+body.is-translucent:not(.is-mobile).theme-light .mod-primary-split .mod-top .workspace-tab-header-container .workspace-tab-header-container-inner,
+body.is-translucent:not(.is-mobile).theme-dark .mod-primary-split .mod-top .workspace-tab-header-container .workspace-tab-header-container-inner,
+body.is-translucent:not(.is-mobile) .workspace-split.mod-secondary-split .workspace-leaf-content,
+body.is-translucent:not(.is-mobile) .workspace-split.mod-secondary-split .view-content,
+body.is-translucent:not(.is-mobile).theme-light .mod-secondary-split .mod-top .workspace-tab-header-container,
+body.is-translucent:not(.is-mobile).theme-dark .mod-secondary-split .mod-top .workspace-tab-header-container,
+body.is-translucent:not(.is-mobile).theme-light .mod-secondary-split .mod-top .workspace-tab-header-container .workspace-tab-header-container-inner,
+body.is-translucent:not(.is-mobile).theme-dark .mod-secondary-split .mod-top .workspace-tab-header-container .workspace-tab-header-container-inner {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* The titlebar strip must stay clear so the glass can reach the top edge. */
+body.is-translucent:not(.is-fullscreen) .titlebar {
+  background: transparent !important;
+  background-image: none !important;
+  border-bottom: none !important;
+}
+body.is-translucent:not(.is-fullscreen) .titlebar .titlebar-inner,
+body.is-translucent:not(.is-fullscreen) .titlebar .titlebar-text {
+  background: transparent !important;
+}
+
+/* Graceful fallback when translucent windows are off: a solid tinted pane. */
+body:not(.is-translucent) .horizontal-main-container {
+  background: var(--dsg-sidebar-solid) !important;
+}
+body:not(.is-translucent) .workspace-ribbon.mod-primary,
+body:not(.is-translucent) .workspace-ribbon.mod-primary::before,
+body:not(.is-translucent) .mod-primary-split .mod-top .workspace-tab-header-container::before,
+body:not(.is-translucent) .mod-primary-split .mod-top .workspace-tab-header-container,
+body:not(.is-translucent) .workspace-split.mod-primary-split,
+body:not(.is-translucent) .workspace-split.mod-secondary-split,
+body:not(.is-translucent) .titlebar {
+  background: transparent !important;
+  background-image: none !important;
+}
+body:not(.is-translucent) .workspace-split.mod-primary-split {
+  border-inline-end: 0.5px solid var(--dsg-hairline) !important;
+}
+body:not(.is-translucent) .workspace-split.mod-secondary-split {
+  border-inline-start: 0.5px solid var(--dsg-hairline) !important;
+}
+body:not(.is-translucent) .workspace-ribbon.mod-primary {
+  border-inline-end: none !important;
+}
+body:not(.is-translucent) .workspace-split.mod-primary-split .workspace-leaf-content,
+body:not(.is-translucent) .workspace-split.mod-primary-split .view-content,
+body:not(.is-translucent):not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header-container,
+body:not(.is-translucent):not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header-container .workspace-tab-header-container-inner {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Keep the resize hit area, hide its painted line (the glass edge is the line). */
+.workspace-split.mod-primary-split > .workspace-leaf-resize-handle,
+.workspace-split.mod-secondary-split > .workspace-leaf-resize-handle {
+  background: transparent !important;
+}
+
+/* ---------------------------------------------------------------------------
+   3 · Left side dock shell
+   --------------------------------------------------------------------------- */
+
+body:not(.is-mobile) .workspace-split.mod-primary-split {
+  font-size: var(--dsg-text-size);
+  --vault-profile-display: flex;
+  --vault-profile-font-size: var(--dsg-text-size);
+  --vault-profile-font-weight: 400;
+  --vault-profile-color: var(--dsg-ink-primary);
+  --vault-profile-color-hover: var(--dsg-ink-primary);
+  --vault-profile-radius: var(--dsg-radius-md);
+  font-family: var(--dsg-font-ui);
+}
+
+/* --- 3.1 Labeled nav tabs read as DSH panel rows ------------------------- */
+
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header-container {
+  border-bottom: none;
+}
+
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header-container .workspace-tab-header-container-inner {
+  background-color: transparent !important;
+  padding: 6px var(--dsg-pane-padding) 8px !important;
+  gap: var(--dsg-row-margin) !important;
+}
+
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header {
+  height: 32px !important;
+  min-height: 32px !important;
+  margin: 0 !important;
+  border: none !important;
+  border-inline: var(--dsg-paint-inset) solid transparent !important;
+  border-radius: var(--dsg-radius-md) !important;
+  background-color: transparent;
+  background-clip: padding-box !important;
+  transition: background-color var(--dsg-speed) var(--dsg-ease);
+}
+
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header .workspace-tab-header-inner {
+  height: 32px !important;
+  min-height: 32px !important;
+  box-sizing: border-box;
+  padding: 5px 9px !important;
+  gap: var(--dsg-row-gap) !important;
+  border: none !important;
+  border-radius: var(--dsg-radius-md) !important;
+  background: transparent !important;
+}
+
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header .workspace-tab-header-inner-title {
+  font-family: var(--dsg-font-ui) !important;
+  font-size: var(--dsg-text-size) !important;
+  font-weight: 400 !important;
+  line-height: var(--dsg-nav-line) !important;
+  letter-spacing: normal !important;
+  color: var(--dsg-ink-primary) !important;
+}
+
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header .workspace-tab-header-inner-icon {
+  --icon-size: var(--dsg-icon);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--dsg-icon);
+  height: var(--dsg-icon);
+  color: var(--dsg-ink-primary);
+}
+
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header .workspace-tab-header-inner-icon svg {
+  width: var(--dsg-icon);
+  height: var(--dsg-icon);
+  stroke-width: 1.5px;
+}
+
+@media (hover: hover) {
+  body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header:hover {
+    background-color: var(--dsg-hover) !important;
+  }
+}
+
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header.is-active {
+  background-color: var(--dsg-hover) !important;
+}
+
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header.is-active .workspace-tab-header-inner {
+  background: transparent !important;
+}
+
+/* Sidebar collapse control, top right. */
+.mod-primary-split .mod-top .workspace-tab-header-container .sidebar-toggle-button,
+.mod-primary-split .mod-top .workspace-tab-header-container .sidebar-toggle-button.mod-primary {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--dsg-radius-sm);
+  color: var(--dsg-ink-secondary);
+}
+
+/* The icon is a clickable child, with its own active-state color. */
+body:not(.is-mobile) .sidebar-toggle-button .clickable-icon {
+  color: var(--dsg-ink-secondary) !important;
+}
+body:not(.is-mobile) .sidebar-toggle-button .clickable-icon:hover {
+  color: var(--dsg-ink-primary) !important;
+}
+/* Harness keeps the left toggle's secondary icon ink on hover. */
+body.mod-macos:not(.is-mobile) .mod-primary-split .sidebar-toggle-button .clickable-icon:hover,
+body.mod-macos:not(.is-mobile) .workspace:not(.is-left-sidedock-open) .sidebar-toggle-button.mod-left .clickable-icon:hover {
+  color: var(--dsg-ink-secondary) !important;
+}
+
+/* Harness panel glyph, retaining Obsidian's native clickable control. */
+body:not(.is-mobile) .sidebar-toggle-button .clickable-icon { position: relative; }
+body:not(.is-mobile) .sidebar-toggle-button .clickable-icon > svg { opacity: 0; }
+body:not(.is-mobile) .sidebar-toggle-button .clickable-icon::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M13.5%201.5H2.5C1.94772%201.5%201.5%201.94772%201.5%202.5V13.5C1.5%2014.0523%201.94772%2014.5%202.5%2014.5H13.5C14.0523%2014.5%2014.5%2014.0523%2014.5%2013.5V2.5C14.5%201.94772%2014.0523%201.5%2013.5%201.5Z%22%2F%3E%3Cpath%20d%3D%22M5.5%201.5V14.5%22%2F%3E%3C%2Fsvg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke%3D%22black%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M13.5%201.5H2.5C1.94772%201.5%201.5%201.94772%201.5%202.5V13.5C1.5%2014.0523%201.94772%2014.5%202.5%2014.5H13.5C14.0523%2014.5%2014.5%2014.0523%2014.5%2013.5V2.5C14.5%201.94772%2014.0523%201.5%2013.5%201.5Z%22%2F%3E%3Cpath%20d%3D%22M5.5%201.5V14.5%22%2F%3E%3C%2Fsvg%3E") center / contain no-repeat;
+  pointer-events: none;
+}
+
+/* Harness uses an 18px panel glyph in the collapsed rail, 16px expanded. */
+body:not(.is-mobile):not(.mod-macos) .workspace:not(.is-left-sidedock-open) .sidebar-toggle-button.mod-left .clickable-icon::after {
+  width: 18px;
+  height: 18px;
+}
+
+/* Harness shows its fish mark at rest and the expand icon on hover. */
+@media (hover: hover) {
+  body:not(.is-mobile):not(.mod-macos) .workspace:not(.is-left-sidedock-open) .sidebar-toggle-button.mod-left .clickable-icon:not(:hover)::after {
+    width: 24px;
+    height: 17.66px;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2023.16%2017.04%22%3E%3Cpath%20fill%3D%22black%22%20d%3D%22M22.9168%201.43018C22.6713%201.31018%2022.5658%201.53918%2022.4223%201.65519C22.3733%201.69269%2022.3318%201.74169%2022.2903%201.78669C21.9317%202.1697%2021.5127%202.42121%2020.9657%202.39121C20.1657%202.34621%2019.4827%202.59771%2018.8787%203.20973C18.7502%202.45521%2018.3236%202.0047%2017.6746%201.71569C17.3351%201.56568%2016.9916%201.41518%2016.7536%201.08867C16.5876%200.856163%2016.5421%200.597155%2016.4591%200.341647C16.4061%200.187643%2016.3536%200.0301382%2016.1761%200.00363739C15.9836%20-0.0263635%2015.9081%200.135141%2015.8326%200.270145C15.5306%200.822162%2015.4136%201.43018%2015.4251%202.0462C15.4516%203.43174%2016.0366%204.53527%2017.1991%205.3203C17.3311%205.4103%2017.3651%205.5003%2017.3236%205.63181C17.2441%205.90231%2017.1501%206.16482%2017.0671%206.43533C17.0141%206.60784%2016.9351%206.64584%2016.7501%206.57033C16.1121%206.30383%2015.5611%205.90931%2015.074%205.4328C14.2475%204.63328%2013.5%203.75075%2012.568%203.05973C12.349%202.89822%2012.13%202.74822%2011.9034%202.60522C10.9524%201.68169%2012.028%200.923165%2012.277%200.833162C12.5375%200.739159%2012.3675%200.41615%2011.5259%200.42015C10.6844%200.42365%209.91439%200.705658%208.93286%201.08117C8.78935%201.13767%208.63835%201.17867%208.48384%201.21267C7.59332%201.04367%206.66829%201.00617%205.70226%201.11517C3.88321%201.31768%202.43016%202.1777%201.36213%203.64575C0.0790928%205.4103%20-0.222916%207.41536%200.146595%209.50642C0.535106%2011.7105%201.66014%2013.535%203.38869%2014.9616C5.18125%2016.4406%207.24581%2017.1657%209.60138%2017.0266C11.0319%2016.9441%2012.6245%2016.7526%2014.421%2015.2321C14.874%2015.4576%2015.3496%2015.5476%2016.1381%2015.6151C16.7456%2015.6716%2017.3306%2015.5851%2017.7836%2015.4911C18.4931%2015.3411%2018.4441%2014.6841%2018.1876%2014.5636C16.1081%2013.595%2016.5646%2013.9891%2016.1496%2013.67C17.2061%2012.42%2018.8202%2010.1979%2019.3182%207.17235C19.3672%206.83834%2019.4297%206.36783%2019.4222%206.09732C19.4182%205.93231%2019.4562%205.86831%2019.6447%205.84931C20.1657%205.78931%2020.6712%205.64681%2021.1357%205.3913C22.4833%204.65528%2023.0268%203.44624%2023.1548%201.9972C23.1738%201.77569%2023.1508%201.54668%2022.9168%201.43018ZM11.1749%2014.4736C9.15936%2012.889%208.18184%2012.3675%207.77832%2012.39C7.40081%2012.4125%207.46881%2012.8445%207.55182%2013.126C7.63882%2013.404%207.75182%2013.5955%207.91033%2013.8396C8.01983%2014.0011%208.09533%2014.2411%207.80083%2014.4216C7.15181%2014.8231%206.02327%2014.2866%205.97027%2014.2601C4.65673%2013.4865%203.5587%2012.4655%202.78467%2011.069C2.03715%209.72493%201.60314%208.28289%201.53164%206.74384C1.51264%206.37233%201.62214%206.24082%201.99215%206.17332C2.47916%206.08332%202.98118%206.06432%203.46769%206.13582C5.52476%206.43633%207.27581%207.35586%208.74385%208.8129C9.58188%209.64243%2010.2159%2010.634%2010.8689%2011.6025C11.5634%2012.631%2012.3105%2013.611%2013.262%2014.4146C13.598%2014.6961%2013.866%2014.9101%2014.1225%2015.0681C13.349%2015.1546%2012.058%2015.1731%2011.1749%2014.4746L11.1749%2014.4736ZM12.141%208.25988C12.141%208.09488%2012.273%207.96338%2012.439%207.96338C12.4765%207.96338%2012.5105%207.97088%2012.541%207.98188C12.5825%207.99688%2012.6205%208.01938%2012.6505%208.05338C12.7035%208.10588%2012.7335%208.18088%2012.7335%208.25988C12.7335%208.42489%2012.6015%208.55639%2012.4355%208.55639C12.2695%208.55639%2012.141%208.42489%2012.141%208.25988ZM15.1415%209.79893C14.949%209.87793%2014.7565%209.94544%2014.5715%209.95294C14.2845%209.96794%2013.9715%209.85143%2013.8015%209.70893C13.5375%209.48742%2013.3485%209.36342%2013.2695%208.97691C13.2355%208.8119%2013.2545%208.55639%2013.2845%208.40989C13.3525%208.09438%2013.277%207.89187%2013.0545%207.70787C12.8735%207.55786%2012.643%207.51636%2012.39%207.51636C12.2955%207.51636%2012.209%207.47486%2012.1445%207.44136C12.039%207.38886%2011.9519%207.25735%2012.035%207.09585C12.0615%207.04335%2012.19%206.91584%2012.22%206.89334C12.5635%206.69784%2012.9595%206.76184%2013.326%206.90834C13.6655%207.04735%2013.9225%207.30236%2014.292%207.66287C14.6695%208.09838%2014.7375%208.21838%2014.9525%208.54539C15.1225%208.8009%2015.277%209.06341%2015.3831%209.36392C15.4471%209.55142%2015.3641%209.70493%2015.1415%209.79893Z%22%2F%3E%3C%2Fsvg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2023.16%2017.04%22%3E%3Cpath%20fill%3D%22black%22%20d%3D%22M22.9168%201.43018C22.6713%201.31018%2022.5658%201.53918%2022.4223%201.65519C22.3733%201.69269%2022.3318%201.74169%2022.2903%201.78669C21.9317%202.1697%2021.5127%202.42121%2020.9657%202.39121C20.1657%202.34621%2019.4827%202.59771%2018.8787%203.20973C18.7502%202.45521%2018.3236%202.0047%2017.6746%201.71569C17.3351%201.56568%2016.9916%201.41518%2016.7536%201.08867C16.5876%200.856163%2016.5421%200.597155%2016.4591%200.341647C16.4061%200.187643%2016.3536%200.0301382%2016.1761%200.00363739C15.9836%20-0.0263635%2015.9081%200.135141%2015.8326%200.270145C15.5306%200.822162%2015.4136%201.43018%2015.4251%202.0462C15.4516%203.43174%2016.0366%204.53527%2017.1991%205.3203C17.3311%205.4103%2017.3651%205.5003%2017.3236%205.63181C17.2441%205.90231%2017.1501%206.16482%2017.0671%206.43533C17.0141%206.60784%2016.9351%206.64584%2016.7501%206.57033C16.1121%206.30383%2015.5611%205.90931%2015.074%205.4328C14.2475%204.63328%2013.5%203.75075%2012.568%203.05973C12.349%202.89822%2012.13%202.74822%2011.9034%202.60522C10.9524%201.68169%2012.028%200.923165%2012.277%200.833162C12.5375%200.739159%2012.3675%200.41615%2011.5259%200.42015C10.6844%200.42365%209.91439%200.705658%208.93286%201.08117C8.78935%201.13767%208.63835%201.17867%208.48384%201.21267C7.59332%201.04367%206.66829%201.00617%205.70226%201.11517C3.88321%201.31768%202.43016%202.1777%201.36213%203.64575C0.0790928%205.4103%20-0.222916%207.41536%200.146595%209.50642C0.535106%2011.7105%201.66014%2013.535%203.38869%2014.9616C5.18125%2016.4406%207.24581%2017.1657%209.60138%2017.0266C11.0319%2016.9441%2012.6245%2016.7526%2014.421%2015.2321C14.874%2015.4576%2015.3496%2015.5476%2016.1381%2015.6151C16.7456%2015.6716%2017.3306%2015.5851%2017.7836%2015.4911C18.4931%2015.3411%2018.4441%2014.6841%2018.1876%2014.5636C16.1081%2013.595%2016.5646%2013.9891%2016.1496%2013.67C17.2061%2012.42%2018.8202%2010.1979%2019.3182%207.17235C19.3672%206.83834%2019.4297%206.36783%2019.4222%206.09732C19.4182%205.93231%2019.4562%205.86831%2019.6447%205.84931C20.1657%205.78931%2020.6712%205.64681%2021.1357%205.3913C22.4833%204.65528%2023.0268%203.44624%2023.1548%201.9972C23.1738%201.77569%2023.1508%201.54668%2022.9168%201.43018ZM11.1749%2014.4736C9.15936%2012.889%208.18184%2012.3675%207.77832%2012.39C7.40081%2012.4125%207.46881%2012.8445%207.55182%2013.126C7.63882%2013.404%207.75182%2013.5955%207.91033%2013.8396C8.01983%2014.0011%208.09533%2014.2411%207.80083%2014.4216C7.15181%2014.8231%206.02327%2014.2866%205.97027%2014.2601C4.65673%2013.4865%203.5587%2012.4655%202.78467%2011.069C2.03715%209.72493%201.60314%208.28289%201.53164%206.74384C1.51264%206.37233%201.62214%206.24082%201.99215%206.17332C2.47916%206.08332%202.98118%206.06432%203.46769%206.13582C5.52476%206.43633%207.27581%207.35586%208.74385%208.8129C9.58188%209.64243%2010.2159%2010.634%2010.8689%2011.6025C11.5634%2012.631%2012.3105%2013.611%2013.262%2014.4146C13.598%2014.6961%2013.866%2014.9101%2014.1225%2015.0681C13.349%2015.1546%2012.058%2015.1731%2011.1749%2014.4746L11.1749%2014.4736ZM12.141%208.25988C12.141%208.09488%2012.273%207.96338%2012.439%207.96338C12.4765%207.96338%2012.5105%207.97088%2012.541%207.98188C12.5825%207.99688%2012.6205%208.01938%2012.6505%208.05338C12.7035%208.10588%2012.7335%208.18088%2012.7335%208.25988C12.7335%208.42489%2012.6015%208.55639%2012.4355%208.55639C12.2695%208.55639%2012.141%208.42489%2012.141%208.25988ZM15.1415%209.79893C14.949%209.87793%2014.7565%209.94544%2014.5715%209.95294C14.2845%209.96794%2013.9715%209.85143%2013.8015%209.70893C13.5375%209.48742%2013.3485%209.36342%2013.2695%208.97691C13.2355%208.8119%2013.2545%208.55639%2013.2845%208.40989C13.3525%208.09438%2013.277%207.89187%2013.0545%207.70787C12.8735%207.55786%2012.643%207.51636%2012.39%207.51636C12.2955%207.51636%2012.209%207.47486%2012.1445%207.44136C12.039%207.38886%2011.9519%207.25735%2012.035%207.09585C12.0615%207.04335%2012.19%206.91584%2012.22%206.89334C12.5635%206.69784%2012.9595%206.76184%2013.326%206.90834C13.6655%207.04735%2013.9225%207.30236%2014.292%207.66287C14.6695%208.09838%2014.7375%208.21838%2014.9525%208.54539C15.1225%208.8009%2015.277%209.06341%2015.3831%209.36392C15.4471%209.55142%2015.3641%209.70493%2015.1415%209.79893Z%22%2F%3E%3C%2Fsvg%3E");
+  }
+}
+
+/* Harness moves the expanded sidebar toggle to the left in macOS fullscreen. */
+body.mod-macos.is-fullscreen:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header-container .sidebar-toggle-button.mod-primary {
+  left: 12px;
+  right: auto;
+  padding: 0;
+  justify-content: center;
+}
+
+.mod-primary-split .mod-top .workspace-tab-header-container .sidebar-toggle-button:hover {
+  background-color: var(--dsg-hover);
+  color: var(--dsg-ink-primary);
+}
+
+/* --- 3.2 Ribbon rail (DSH collapsed-rail metrics: 36px keys, 12px gap) --- */
+
+body:not(.is-mobile) {
+  --ribbon-width: 56px;
+  --ribbon-padding: 8px 10px;
+  --ribbon-background: transparent;
+  --ribbon-background-collapsed: transparent;
+}
+
+body:not(.is-mobile) .workspace-ribbon.mod-primary {
+  align-items: center;
+  gap: 0;
+  border-inline-end: none;
+}
+
+body:not(.is-mobile) .workspace-ribbon.mod-primary .side-dock-actions,
+body:not(.is-mobile) .workspace-ribbon.mod-primary .side-dock-settings {
+  width: 36px;
+  gap: 12px;
+  align-items: center;
+}
+
+body:not(.is-mobile) .workspace-ribbon.mod-primary .side-dock-actions {
+  margin-top: 2px;
+  margin-bottom: 16px;
+}
+
+body:not(.is-mobile) .workspace-ribbon.mod-primary .side-dock-settings {
+  margin-top: auto;
+  margin-bottom: 8px;
+}
+
+body:not(.is-mobile) .workspace-ribbon.mod-primary .side-dock-ribbon-action {
+  box-sizing: border-box;
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 9px;
+  margin: 0;
+  border-radius: var(--dsg-radius-md);
+  --icon-size: 18px;
+  color: var(--dsg-ink-secondary);
+  transition: background-color var(--dsg-speed) var(--dsg-ease),
+    color var(--dsg-speed) var(--dsg-ease);
+}
+
+body:not(.is-mobile) .workspace-ribbon.mod-primary .side-dock-ribbon-action svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 1.75px;
+}
+
+body:not(.is-mobile) .workspace-ribbon.mod-primary .side-dock-ribbon-action:hover,
+body:not(.is-mobile) .workspace-ribbon.mod-primary .side-dock-ribbon-action.is-active {
+  background-color: var(--dsg-hover);
+  color: var(--dsg-ink-primary);
+}
+
+/* ---------------------------------------------------------------------------
+   4 · File explorer · tree rows on the DSH 32/34px rhythm
+   --------------------------------------------------------------------------- */
+
+.workspace-leaf-content[data-type="file-explorer"] {
+  --nav-item-size: var(--dsg-text-size);
+  --nav-item-radius: var(--dsg-radius-md);
+  --nav-item-weight: 400;
+  --nav-item-weight-hover: 400;
+  --nav-item-weight-active: 400;
+  --nav-item-color: var(--dsg-ink-primary);
+  --nav-item-color-hover: var(--dsg-ink-primary);
+  --nav-item-color-active: var(--dsg-ink-primary);
+  --nav-item-color-selected: var(--dsg-ink-primary);
+  --nav-item-background-hover: var(--dsg-hover);
+  --nav-item-background-active: var(--dsg-active);
+  --nav-item-background-selected: var(--dsg-active);
+  --nav-item-padding: 6px 8px 6px var(--dsg-row-padding);
+  --nav-item-parent-padding: 7px 8px 7px var(--dsg-row-padding);
+  --nav-item-margin-bottom: var(--dsg-row-margin);
+  --nav-item-children-margin-start: 8px;
+  --nav-item-children-padding-start: 4px;
+  --nav-indentation-guide-color: transparent;
+  --nav-collapse-icon-color: var(--dsg-ink-tertiary);
+  --nav-collapse-icon-color-collapsed: var(--dsg-ink-tertiary);
+  font-family: var(--dsg-font-ui);
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-files-container {
+  padding: 2px calc(var(--dsg-pane-padding) - 5.5px) 16px var(--dsg-pane-padding) !important;
+  scrollbar-gutter: stable;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .tree-item-self {
+  box-sizing: border-box;
+  align-items: center;
+  min-height: 32px;
+  border-radius: var(--dsg-radius-md) !important;
+  border-inline: var(--dsg-paint-inset) solid transparent;
+  background-clip: padding-box;
+  margin: 0 0 var(--dsg-row-margin) !important;
+  font-size: var(--dsg-text-size) !important;
+  font-weight: 400 !important;
+  line-height: var(--dsg-text-line) !important;
+  letter-spacing: normal !important;
+  color: var(--dsg-ink-primary) !important;
+  transition: background-color var(--dsg-speed) var(--dsg-ease);
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .tree-item-self.nav-folder-title {
+  min-height: 32px;
+  padding-block: 6px !important;
+  padding-inline-start: var(--dsg-row-padding) !important;
+  margin-bottom: 4px !important;
+}
+
+/* Match the 4px gap after an expanded root folder group. */
+.workspace-leaf-content[data-type="file-explorer"] .nav-files-container > div > .nav-folder:not(.is-collapsed) + .nav-folder {
+  padding-top: 2px !important;
+}
+
+/* Harness uses a 2px gap between an expanded workspace and its first row. */
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder:not(.is-collapsed) > .tree-item-self.nav-folder-title {
+  margin-bottom: var(--dsg-row-margin) !important;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .tree-item-self.nav-file-title {
+  min-height: 32px;
+  padding-block: 6px !important;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .tree-item-self .tree-item-inner,
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-title-content,
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title-content {
+  font-family: var(--dsg-font-ui) !important;
+  font-size: var(--dsg-text-size) !important;
+  font-weight: 400 !important;
+  line-height: var(--dsg-text-line) !important;
+  color: inherit !important;
+}
+
+@media (hover: hover) {
+  .workspace-leaf-content[data-type="file-explorer"] .tree-item-self:hover {
+    background-color: var(--dsg-hover) !important;
+  }
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .tree-item-self.is-active,
+.workspace-leaf-content[data-type="file-explorer"] .tree-item-self.is-selected {
+  background-color: var(--dsg-hover) !important;
+}
+
+/* Keep nested folders aligned to the DSH 12px indent, no vertical padding
+   hacks between root groups. */
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder.mod-root > .nav-folder-children {
+  margin-inline-start: 0 !important;
+  padding-inline-start: 0 !important;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-children {
+  border-inline-start: none !important;
+}
+
+/* Harness sidebar glyphs use the application's own 16px icon paths. */
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title .collapse-icon {
+  display: flex !important;
+  position: static !important;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 20px;
+  margin: 0 6px 0 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+  color: var(--dsg-ink-tertiary);
+  align-items: center;
+  justify-content: center;
+}
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title .collapse-icon svg { display: none; }
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder-title .collapse-icon::before {
+  content: "";
+  display: block;
+  width: 16px;
+  height: 16px;
+  transition: transform 150ms var(--dsg-ease);
+  background: currentColor;
+  -webkit-mask: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M1.50439%203.11059C1.50439%202.55831%201.95211%202.1106%202.50439%202.1106H5.43389C5.67773%202.1106%205.91318%202.19969%206.09593%202.36113L7.71649%203.79265C7.89924%203.95409%208.1347%204.04319%208.3785%204.04319H13.4958C14.0481%204.04319%2014.4958%204.4909%2014.4958%205.04319V12.8894C14.4958%2013.4417%2014.0481%2013.8894%2013.4958%2013.8894H2.50439C1.95211%2013.8894%201.50439%2013.4417%201.50439%2012.8894V4.04319V3.11059Z%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M3.63501%207.66614H12.3647%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E') center / contain no-repeat;
+  mask: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M1.50439%203.11059C1.50439%202.55831%201.95211%202.1106%202.50439%202.1106H5.43389C5.67773%202.1106%205.91318%202.19969%206.09593%202.36113L7.71649%203.79265C7.89924%203.95409%208.1347%204.04319%208.3785%204.04319H13.4958C14.0481%204.04319%2014.4958%204.4909%2014.4958%205.04319V12.8894C14.4958%2013.4417%2014.0481%2013.8894%2013.4958%2013.8894H2.50439C1.95211%2013.8894%201.50439%2013.4417%201.50439%2012.8894V4.04319V3.11059Z%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M3.63501%207.66614H12.3647%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E') center / contain no-repeat;
+}
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder:not(.is-collapsed) > .nav-folder-title .collapse-icon::before {
+  -webkit-mask-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M2.55912%207.93683C2.67584%207.49906%203.0723%207.19446%203.52536%207.19446H13.6491C14.3061%207.19446%2014.7846%207.81725%2014.6153%208.45209L13.4411%2012.856C13.3244%2013.2938%2012.9279%2013.5984%2012.4748%2013.5984H2.35113C1.69411%2013.5984%201.21562%2012.9756%201.38489%2012.3407L2.55912%207.93683Z%22%20fill%3D%22black%22%20opacity%3D%220.16%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M13.6491%206.69446C14.6346%206.69453%2015.3522%207.62895%2015.0983%208.58118L13.9245%2012.9845C13.7494%2013.6412%2013.1539%2014.0988%2012.4743%2014.0988H2.35126C1.36574%2014.0988%200.648153%2013.1643%200.902044%2012.212L2.07587%207.80774C2.25102%207.15128%202.84567%206.69455%203.52509%206.69446H13.6491ZM3.52509%207.69446C3.29865%207.69455%203.10004%207.84674%203.04169%208.06555L1.86786%2012.4698C1.78345%2012.7872%202.02285%2013.0988%202.35126%2013.0988H12.4743C12.7007%2013.0988%2012.8992%2012.9463%2012.9577%2012.7277L14.1325%208.32336C14.2171%208.00598%2013.9776%207.69453%2013.6491%207.69446H3.52509Z%22%20fill%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M4.7666%201.90137C5.13227%201.90144%205.48571%202.03525%205.75977%202.27734L7.27246%203.61328C7.36379%203.69382%207.48174%203.73828%207.60352%203.73828H12.3994C13.2276%203.73841%2013.8993%204.41005%2013.8994%205.23828V6.7168C13.8183%206.70327%2013.735%206.69436%2013.6494%206.69434H12.8994V5.23828C12.8993%204.96233%2012.6754%204.73841%2012.3994%204.73828H7.60352C7.23781%204.73828%206.88446%204.60438%206.61035%204.3623L5.09766%203.02637C5.00636%202.94576%204.88838%202.90144%204.7666%202.90137H2.0498C1.77366%202.90137%201.5498%203.12523%201.5498%203.40137V9.78223L0.902344%2012.2119C0.648452%2013.1642%201.36604%2014.0986%202.35156%2014.0986H2.0498C1.2214%2014.0986%200.549838%2013.427%200.549805%2012.5986V3.40137C0.549805%202.57294%201.22138%201.90137%202.0498%201.90137H4.7666Z%22%20fill%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
+  mask-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M2.55912%207.93683C2.67584%207.49906%203.0723%207.19446%203.52536%207.19446H13.6491C14.3061%207.19446%2014.7846%207.81725%2014.6153%208.45209L13.4411%2012.856C13.3244%2013.2938%2012.9279%2013.5984%2012.4748%2013.5984H2.35113C1.69411%2013.5984%201.21562%2012.9756%201.38489%2012.3407L2.55912%207.93683Z%22%20fill%3D%22black%22%20opacity%3D%220.16%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M13.6491%206.69446C14.6346%206.69453%2015.3522%207.62895%2015.0983%208.58118L13.9245%2012.9845C13.7494%2013.6412%2013.1539%2014.0988%2012.4743%2014.0988H2.35126C1.36574%2014.0988%200.648153%2013.1643%200.902044%2012.212L2.07587%207.80774C2.25102%207.15128%202.84567%206.69455%203.52509%206.69446H13.6491ZM3.52509%207.69446C3.29865%207.69455%203.10004%207.84674%203.04169%208.06555L1.86786%2012.4698C1.78345%2012.7872%202.02285%2013.0988%202.35126%2013.0988H12.4743C12.7007%2013.0988%2012.8992%2012.9463%2012.9577%2012.7277L14.1325%208.32336C14.2171%208.00598%2013.9776%207.69453%2013.6491%207.69446H3.52509Z%22%20fill%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M4.7666%201.90137C5.13227%201.90144%205.48571%202.03525%205.75977%202.27734L7.27246%203.61328C7.36379%203.69382%207.48174%203.73828%207.60352%203.73828H12.3994C13.2276%203.73841%2013.8993%204.41005%2013.8994%205.23828V6.7168C13.8183%206.70327%2013.735%206.69436%2013.6494%206.69434H12.8994V5.23828C12.8993%204.96233%2012.6754%204.73841%2012.3994%204.73828H7.60352C7.23781%204.73828%206.88446%204.60438%206.61035%204.3623L5.09766%203.02637C5.00636%202.94576%204.88838%202.90144%204.7666%202.90137H2.0498C1.77366%202.90137%201.5498%203.12523%201.5498%203.40137V9.78223L0.902344%2012.2119C0.648452%2013.1642%201.36604%2014.0986%202.35156%2014.0986H2.0498C1.2214%2014.0986%200.549838%2013.427%200.549805%2012.5986V3.40137C0.549805%202.57294%201.22138%201.90137%202.0498%201.90137H4.7666Z%22%20fill%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
+}
+.theme-light .workspace-leaf-content[data-type="file-explorer"] .nav-folder:has(.nav-file-title.is-active) > .nav-folder-title .collapse-icon { color: #4176e6; }
+.theme-dark .workspace-leaf-content[data-type="file-explorer"] .nav-folder:has(.nav-file-title.is-active) > .nav-folder-title .collapse-icon { color: #7aaaff; }
+@media (hover: hover) {
+  .workspace-leaf-content[data-type="file-explorer"] .nav-folder > .nav-folder-title:hover .collapse-icon::before {
+    -webkit-mask-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M5.5%204.5C5.5%204.40714%205.52586%204.31612%205.57467%204.23713C5.62349%204.15815%205.69334%204.09431%205.77639%204.05279C5.85945%204.01126%205.95242%203.99368%206.0449%204.00202C6.13738%204.01036%206.22572%204.04429%206.3%204.1L10.967%207.6C11.0291%207.64657%2011.0795%207.70697%2011.1142%207.77639C11.1489%207.84582%2011.167%207.92238%2011.167%208C11.167%208.07762%2011.1489%208.15418%2011.1142%208.22361C11.0795%208.29303%2011.0291%208.35343%2010.967%208.4L6.3%2011.9C6.22572%2011.9557%206.13738%2011.9896%206.0449%2011.998C5.95242%2012.0063%205.85945%2011.9887%205.77639%2011.9472C5.69334%2011.9057%205.62349%2011.8419%205.57467%2011.7629C5.52586%2011.6839%205.5%2011.5929%205.5%2011.5V4.5Z%22%20fill%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
+    mask-image: url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M5.5%204.5C5.5%204.40714%205.52586%204.31612%205.57467%204.23713C5.62349%204.15815%205.69334%204.09431%205.77639%204.05279C5.85945%204.01126%205.95242%203.99368%206.0449%204.00202C6.13738%204.01036%206.22572%204.04429%206.3%204.1L10.967%207.6C11.0291%207.64657%2011.0795%207.70697%2011.1142%207.77639C11.1489%207.84582%2011.167%207.92238%2011.167%208C11.167%208.07762%2011.1489%208.15418%2011.1142%208.22361C11.0795%208.29303%2011.0291%208.35343%2010.967%208.4L6.3%2011.9C6.22572%2011.9557%206.13738%2011.9896%206.0449%2011.998C5.95242%2012.0063%205.85945%2011.9887%205.77639%2011.9472C5.69334%2011.9057%205.62349%2011.8419%205.57467%2011.7629C5.52586%2011.6839%205.5%2011.5929%205.5%2011.5V4.5Z%22%20fill%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E');
+  }
+  .workspace-leaf-content[data-type="file-explorer"] .nav-folder:not(.is-collapsed) > .nav-folder-title:hover .collapse-icon::before { transform: rotate(90deg); }
+  /* Harness colors the active folder, but its hover chevron uses the neutral slot color. */
+  .theme-light .workspace-leaf-content[data-type="file-explorer"] .nav-folder:has(.nav-file-title.is-active) > .nav-folder-title:hover .collapse-icon,
+  .theme-dark .workspace-leaf-content[data-type="file-explorer"] .nav-folder:has(.nav-file-title.is-active) > .nav-folder-title:hover .collapse-icon {
+    color: var(--dsg-ink-tertiary);
+  }
+}
+
+/* --- 4.1 Explorer header: DSH section header (36px, 28px tools) ---------- */
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-header {
+  flex-shrink: 0;
+  padding: 4px var(--dsg-pane-padding) !important;
+  margin: 0 !important;
+  min-height: 0 !important;
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-buttons-container {
+  justify-content: flex-end !important;
+  gap: 4px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
+
+/* Label the explorer section like the Harness workspace header. */
+.workspace-leaf-content[data-type="file-explorer"] .nav-buttons-container::before {
+  content: "文件";
+  display: flex;
+  align-items: center;
+  flex: 1 1 auto;
+  min-width: 0;
+  /* Harness shifts its 12px-inset section label left by 1px. */
+  padding-left: 11px;
+  color: var(--dsg-ink-tertiary);
+  font-family: var(--dsg-font-ui);
+  font-size: var(--dsg-text-size);
+  font-weight: 400;
+  line-height: var(--dsg-text-line);
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-action-button {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  margin: 0;
+  border-radius: var(--dsg-radius-sm);
+  --icon-size: var(--dsg-icon);
+  color: var(--dsg-ink-secondary);
+  transition: background-color var(--dsg-speed) var(--dsg-ease),
+    color var(--dsg-speed) var(--dsg-ease);
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-action-button svg {
+  width: var(--dsg-icon);
+  height: var(--dsg-icon);
+  stroke-width: 1.75px;
+}
+
+/* Harness project-add glyph, preserving Obsidian's folder action. */
+.workspace-leaf-content[data-type="file-explorer"] .nav-action-button svg.lucide-folder-plus {
+  background-color: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M5.54492%202.06738C5.91034%202.06754%206.26318%202.20149%206.53711%202.44336L7.94043%203.68164V4.7998C7.71462%204.74105%207.50367%204.63139%207.32617%204.47461L5.87598%203.19238C5.78477%203.11185%205.66658%203.06754%205.54492%203.06738H2.94922C2.67322%203.06738%202.44946%203.29145%202.44922%203.56738V12.4326C2.44927%2012.7087%202.67311%2012.9326%202.94922%2012.9326H12.9326C13.2086%2012.9325%2013.4326%2012.7086%2013.4326%2012.4326V8.53613H14.4326V12.4326C14.4326%2013.2609%2013.7609%2013.9325%2012.9326%2013.9326H2.94922C2.12083%2013.9326%201.44927%2013.261%201.44922%2012.4326V3.56738C1.44946%202.73916%202.12094%202.06738%202.94922%202.06738H5.54492Z%22%20fill%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M9.75977%204.50208H14.5509%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M12.1492%206.89758L12.1492%202.10642%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M5.54492%202.06738C5.91034%202.06754%206.26318%202.20149%206.53711%202.44336L7.94043%203.68164V4.7998C7.71462%204.74105%207.50367%204.63139%207.32617%204.47461L5.87598%203.19238C5.78477%203.11185%205.66658%203.06754%205.54492%203.06738H2.94922C2.67322%203.06738%202.44946%203.29145%202.44922%203.56738V12.4326C2.44927%2012.7087%202.67311%2012.9326%202.94922%2012.9326H12.9326C13.2086%2012.9325%2013.4326%2012.7086%2013.4326%2012.4326V8.53613H14.4326V12.4326C14.4326%2013.2609%2013.7609%2013.9325%2012.9326%2013.9326H2.94922C2.12083%2013.9326%201.44927%2013.261%201.44922%2012.4326V3.56738C1.44946%202.73916%202.12094%202.06738%202.94922%202.06738H5.54492Z%22%20fill%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M9.75977%204.50208H14.5509%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M12.1492%206.89758L12.1492%202.10642%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E") center / contain no-repeat;
+}
+.workspace-leaf-content[data-type="file-explorer"] .nav-action-button svg.lucide-folder-plus > * { visibility: hidden; }
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-action-button:hover {
+  background-color: var(--dsg-hover) !important;
+  color: var(--dsg-ink-secondary);
+}
+
+.workspace-leaf-content[data-type="file-explorer"] .nav-action-button.is-active {
+  background-color: var(--dsg-active) !important;
+  color: var(--dsg-ink-primary);
+}
+
+/* ---------------------------------------------------------------------------
+   4b · Right side dock — same row language as the left dock
+   --------------------------------------------------------------------------- */
+
+body:not(.is-mobile) .workspace-split.mod-secondary-split {
+  font-family: var(--dsg-font-ui);
+  font-size: var(--dsg-text-size);
+}
+
+body:not(.is-mobile) .workspace-split.mod-secondary-split .workspace-leaf,
+body:not(.is-mobile) .workspace-split.mod-secondary-split .workspace-tabs {
+  background-color: transparent;
+}
+
+body:not(.is-mobile) .mod-secondary-split .mod-top .workspace-tab-header-container {
+  border-bottom: none;
+}
+
+body:not(.is-mobile) .mod-secondary-split .mod-top .workspace-tab-header-container .workspace-tab-header-container-inner {
+  background-color: transparent !important;
+  padding: 6px var(--dsg-pane-padding) 8px !important;
+  gap: var(--dsg-row-margin) !important;
+}
+
+body:not(.is-mobile) .mod-secondary-split .mod-top .workspace-tab-header {
+  height: 36px !important;
+  min-height: 36px !important;
+  margin: 0 !important;
+  border: none !important;
+  border-inline: var(--dsg-paint-inset) solid transparent !important;
+  border-radius: var(--dsg-radius-md) !important;
+  background-color: transparent;
+  background-clip: padding-box !important;
+}
+
+body:not(.is-mobile) .mod-secondary-split .mod-top .workspace-tab-header .workspace-tab-header-inner {
+  height: 36px !important;
+  min-height: 36px !important;
+  box-sizing: border-box;
+  padding: 7px 9px !important;
+  gap: var(--dsg-row-gap) !important;
+  border: none !important;
+  border-radius: var(--dsg-radius-md) !important;
+  background: transparent !important;
+}
+
+body:not(.is-mobile) .mod-secondary-split .mod-top .workspace-tab-header .workspace-tab-header-inner-title {
+  font-family: var(--dsg-font-ui) !important;
+  font-size: var(--dsg-text-size) !important;
+  font-weight: 400 !important;
+  line-height: var(--dsg-nav-line) !important;
+  color: var(--dsg-ink-primary) !important;
+}
+
+body:not(.is-mobile) .mod-secondary-split .mod-top .workspace-tab-header .workspace-tab-header-inner-icon {
+  --icon-size: var(--dsg-icon);
+  width: var(--dsg-icon);
+  height: var(--dsg-icon);
+  color: var(--dsg-ink-primary);
+}
+
+body:not(.is-mobile) .mod-secondary-split .mod-top .workspace-tab-header .workspace-tab-header-inner-icon svg {
+  width: var(--dsg-icon);
+  height: var(--dsg-icon);
+  stroke-width: 1.75px;
+}
+
+@media (hover: hover) {
+  body:not(.is-mobile) .mod-secondary-split .mod-top .workspace-tab-header:hover {
+    background-color: var(--dsg-hover) !important;
+  }
+}
+
+body:not(.is-mobile) .mod-secondary-split .mod-top .workspace-tab-header.is-active {
+  background-color: var(--dsg-hover) !important;
+}
+
+/* ---------------------------------------------------------------------------
+   5 · Vault profile footer
+   --------------------------------------------------------------------------- */
+
+body:not(.is-mobile) .workspace-split.mod-primary-split .workspace-sidedock-vault-profile {
+  padding: 6px var(--dsg-pane-padding) !important;
+  gap: 4px !important;
+  background: transparent !important;
+  border-top: none !important;
+  min-height: 0;
+}
+
+body:not(.is-mobile) .workspace-split.mod-primary-split .workspace-sidedock-vault-profile .workspace-drawer-vault-switcher {
+  height: 36px;
+  box-sizing: border-box;
+  padding: 7px var(--dsg-row-padding) !important;
+  gap: 8px;
+  border: none;
+  border-radius: var(--dsg-radius-md);
+  background: transparent;
+  transition: background-color var(--dsg-speed) var(--dsg-ease);
+}
+
+body:not(.is-mobile) .workspace-split.mod-primary-split .workspace-sidedock-vault-profile .workspace-drawer-vault-switcher:hover {
+  background-color: var(--dsg-hover) !important;
+}
+
+body:not(.is-mobile) .workspace-split.mod-primary-split .workspace-sidedock-vault-profile .workspace-drawer-vault-name {
+  font-family: var(--dsg-font-ui) !important;
+  font-size: var(--dsg-text-size) !important;
+  font-weight: 400 !important;
+  line-height: var(--dsg-nav-line) !important;
+  color: var(--dsg-ink-primary);
+}
+
+body:not(.is-mobile) .workspace-split.mod-primary-split .workspace-sidedock-vault-profile .workspace-drawer-vault-switcher-icon {
+  --icon-size: var(--dsg-icon);
+  color: var(--dsg-ink-tertiary);
+}
+
+body:not(.is-mobile) .workspace-split.mod-primary-split .workspace-sidedock-vault-profile .workspace-drawer-vault-actions {
+  gap: 2px;
+  align-items: center;
+}
+
+body:not(.is-mobile) .workspace-split.mod-primary-split .workspace-sidedock-vault-profile .workspace-drawer-vault-actions .clickable-icon,
+body:not(.is-mobile) .workspace-split.mod-primary-split .workspace-sidedock-vault-profile .workspace-drawer-vault-actions .sidebar-toggle-button {
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: var(--dsg-radius-sm);
+  --icon-size: var(--dsg-icon);
+  color: var(--dsg-ink-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body:not(.is-mobile) .workspace-split.mod-primary-split .workspace-sidedock-vault-profile .workspace-drawer-vault-actions .clickable-icon:hover {
+  background-color: var(--dsg-hover);
+  color: var(--dsg-ink-primary);
+}
+
+/* ---------------------------------------------------------------------------
+   6 · Small polish
+   --------------------------------------------------------------------------- */
+
+/* DSH scrollbars in the glass pane. Obsidian's inherited scrollbar-color
+   overrides WebKit pseudo-elements unless reset on each scroll container. */
+.workspace-split.mod-primary-split .nav-files-container,
+.workspace-split.mod-primary-split .workspace-leaf-content {
+  scrollbar-color: auto;
+  scrollbar-width: auto;
+}
+.workspace-leaf-content[data-type="file-explorer"] .nav-files-container::-webkit-scrollbar,
+.workspace-split.mod-primary-split .workspace-leaf-content::-webkit-scrollbar {
+  width: 5px;
+}
+.workspace-leaf-content[data-type="file-explorer"] .nav-files-container::-webkit-scrollbar-thumb,
+.workspace-split.mod-primary-split .workspace-leaf-content::-webkit-scrollbar-thumb {
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+}
+.theme-light .workspace-split.mod-primary-split:is(:hover, .dsg-scrollbar-visible) .workspace-leaf-content::-webkit-scrollbar-thumb,
+.theme-light .workspace-split.mod-primary-split:is(:hover, .dsg-scrollbar-visible) .nav-files-container::-webkit-scrollbar-thumb {
+  background: rgb(229, 229, 229);
+}
+.theme-dark .workspace-split.mod-primary-split:is(:hover, .dsg-scrollbar-visible) .workspace-leaf-content::-webkit-scrollbar-thumb,
+.theme-dark .workspace-split.mod-primary-split:is(:hover, .dsg-scrollbar-visible) .nav-files-container::-webkit-scrollbar-thumb {
+  background: rgb(84, 85, 87);
+}
+.theme-light .workspace-split.mod-primary-split .workspace-leaf-content::-webkit-scrollbar-thumb:hover,
+.theme-light .workspace-split.mod-primary-split .nav-files-container::-webkit-scrollbar-thumb:hover {
+  background: rgb(212, 212, 212);
+}
+.theme-dark .workspace-split.mod-primary-split .workspace-leaf-content::-webkit-scrollbar-thumb:hover,
+.theme-dark .workspace-split.mod-primary-split .nav-files-container::-webkit-scrollbar-thumb:hover {
+  background: rgb(101, 103, 107);
+}
+.workspace-leaf-content[data-type="file-explorer"] .nav-files-container::-webkit-scrollbar-track,
+.workspace-split.mod-primary-split .workspace-leaf-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* The left dock should inherit the DSH type stack. */
+.workspace-split.mod-primary-split,
+.workspace-ribbon.mod-primary {
+  font-family: var(--dsg-font-ui);
+}
+
+/* Keep the glass pane free of the default panel tint. */
+.workspace-split.mod-primary-split .workspace-leaf,
+.workspace-split.mod-primary-split .workspace-tabs {
+  background-color: transparent;
+}
+
+
+/* ==========================================================================
+   End of DeepSeek Glass sidebar layer.
+   If you want the sidebar to be more transparent, edit --dsg-sidebar-glass
+   for .theme-light / .theme-dark above. Set translucency to "off" in
+   Settings → Appearance to fall back to the solid glass tint.
+   ========================================================================== */
+
+/* Keep the Obsidian ribbon visible in its own column so it never covers
+   the sidebar or the note area, including when the sidebar is collapsed. */
+body:not(.is-mobile):not(.hider-ribbon):not(.ribbon-bottom-left-hover):not(.ribbon-bottom-left-hover-vertical):not(.ribbon-vertical-expand) {
+  --ribbon-width: 56px;
+}
+body:not(.is-mobile):not(.hider-ribbon):not(.ribbon-bottom-left-hover):not(.ribbon-bottom-left-hover-vertical):not(.ribbon-vertical-expand) .workspace-ribbon.mod-primary {
+  position: relative;
+  top: auto; bottom: auto; left: auto;
+  width: 56px; height: auto; flex: 0 0 56px;
+  overflow: visible; opacity: 1;
+  transition: none;
+}
+
+/* Harness new-chat glyph; the action remains Obsidian new note. */
+.dsg-sidebar-new-icon { width: 14px !important; height: 14px !important; background: currentColor; -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221.3%22%3E%3Cpath%20d%3D%22M2.37091%2011.2501C1.58745%209.89288%201.32067%208.29835%201.61969%206.76006C1.91872%205.22177%202.76342%203.8433%203.99826%202.87846C5.2331%201.91362%206.77494%201.42737%208.33988%201.50925C9.90482%201.59113%2011.3875%202.23562%2012.5149%203.32406C13.6425%204.41269%2014.3387%205.87206%2014.4754%207.4334C14.612%208.99474%2014.18%2010.5529%2013.2587%2011.8209C12.3375%2013.0888%2010.9891%2013.9813%209.46194%2014.3337C8.18691%2014.628%206.85895%2014.5294%205.64989%2014.0605C5.1712%2013.8748%204.76962%2013.4932%204.26534%2013.3967C3.67413%2013.2835%202.95257%2013.5598%202.03794%2014.3337%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M8%205V11%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M5%208H11%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E") center / contain no-repeat; mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221.3%22%3E%3Cpath%20d%3D%22M2.37091%2011.2501C1.58745%209.89288%201.32067%208.29835%201.61969%206.76006C1.91872%205.22177%202.76342%203.8433%203.99826%202.87846C5.2331%201.91362%206.77494%201.42737%208.33988%201.50925C9.90482%201.59113%2011.3875%202.23562%2012.5149%203.32406C13.6425%204.41269%2014.3387%205.87206%2014.4754%207.4334C14.612%208.99474%2014.18%2010.5529%2013.2587%2011.8209C12.3375%2013.0888%2010.9891%2013.9813%209.46194%2014.3337C8.18691%2014.628%206.85895%2014.5294%205.64989%2014.0605C5.1712%2013.8748%204.76962%2013.4932%204.26534%2013.3967C3.67413%2013.2835%202.95257%2013.5598%202.03794%2014.3337%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M8%205V11%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M5%208H11%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E") center / contain no-repeat; }
+.dsg-sidebar-new-icon svg { display: none; }
+
+/* Official Harness wordmark, sourced from ui-primitives/BrandWordmark.tsx. */
+.dsg-sidebar-brand { font-size: 0 !important; }
+.dsg-sidebar-brand::before { display: none !important; }
+.dsg-sidebar-brand::after { content: ""; display: block; width: 182px; height: 24px; background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20182%2024%22%20fill%3D%22none%22%3E%20%20%20%20%20%20%3Cpath%20d%3D%22M68.416%2018.2447H67.0501V16.1272H68.416C69.2619%2016.1272%2070.1166%2015.9163%2070.6671%2015.3304C71.2181%2014.7444%2071.426%2013.8455%2071.426%2012.9471C71.426%2012.0487%2071.2268%2011.1498%2070.6671%2010.5643C70.1083%209.97831%2069.2619%209.76744%2068.416%209.76744C67.5701%209.76744%2066.7154%209.97831%2066.1639%2010.5643C65.6129%2011.1503%2065.4049%2012.0487%2065.4049%2012.9471V21.6435H63.009V7.6582H65.4049V8.54883H65.8442C65.8918%208.49393%2065.9394%208.44728%2065.9875%208.40064C66.5871%207.85353%2067.5049%207.6582%2068.4072%207.6582C69.8212%207.6582%2071.2341%208.00998%2072.1607%208.98662C73.0868%209.96325%2073.4143%2011.4632%2073.4143%2012.9558C73.4143%2014.4485%2073.0785%2015.9406%2072.1607%2016.925C71.2424%2017.9094%2069.8212%2018.2457%2068.416%2018.2457V18.2447Z%22%20fill%3D%22%230f1115%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M31.9551%208.03497H33.3204V10.1525H31.9551C31.1087%2010.1525%2030.2545%2010.3633%2029.7035%2010.9493C29.1525%2011.5353%2028.945%2012.4342%2028.945%2013.3326C28.945%2014.231%2029.1447%2015.1294%2029.7035%2015.7154C30.2623%2016.3014%2031.1087%2016.5122%2031.9551%2016.5122C32.8015%2016.5122%2033.6562%2016.3014%2034.2072%2015.7154C34.7582%2015.1294%2034.9657%2014.231%2034.9657%2013.3326V4.62842H37.3611V18.6219H34.9657V17.7313H34.5264C34.4783%2017.7857%2034.4307%2017.8329%2034.3826%2017.8795C33.7835%2018.4261%2032.8652%2018.6219%2031.9629%2018.6219C30.5494%2018.6219%2029.136%2018.2707%2028.2099%2017.294C27.2838%2016.3174%2026.9563%2014.817%2026.9563%2013.3248C26.9563%2011.8327%2027.2916%2010.34%2028.2099%209.35561C29.136%208.37898%2030.5494%208.03497%2031.9551%208.03497Z%22%20fill%3D%22%230f1115%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M49.3786%2013.1431V13.9948H42.9984V12.2996H47.2305C47.1348%2011.6825%2046.9113%2011.1043%2046.5119%2010.682C45.9371%2010.0727%2045.0503%209.85409%2044.1723%209.85409C43.2943%209.85409%2042.4076%2010.0727%2041.8328%2010.682C41.258%2011.2913%2041.05%2012.2213%2041.05%2013.1435C41.05%2014.0658%2041.2575%2015.003%2041.8328%2015.6046C42.4076%2016.2061%2043.2939%2016.433%2044.1723%2016.433C45.0508%2016.433%2045.9371%2016.2143%2046.5119%2015.6046C46.5916%2015.5186%2046.6635%2015.4248%2046.7354%2015.331H49.0992C48.8918%2016.0657%2048.5643%2016.7299%2048.0691%2017.2454C47.111%2018.2531%2045.6339%2018.6205%2044.1723%2018.6205C42.7108%2018.6205%2041.2337%2018.2609%2040.2755%2017.2454C39.3174%2016.2299%2038.9661%2014.6828%2038.9661%2013.1435C38.9661%2011.6043%2039.3096%2010.0494%2040.2755%209.04168C41.242%208.03396%2042.7108%207.66663%2044.1723%207.66663C45.6339%207.66663%2047.111%208.02618%2048.0691%209.04168C49.0351%2010.0572%2049.3786%2011.6043%2049.3786%2013.1435V13.1431Z%22%20fill%3D%22%230f1115%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M61.4045%2013.1431V13.9948H55.0243V12.2996H59.2564C59.1602%2011.6825%2058.9372%2011.1043%2058.5378%2010.682C57.963%2010.0727%2057.0762%209.85409%2056.1982%209.85409C55.3202%209.85409%2054.4335%2010.0727%2053.8587%2010.682C53.2839%2011.2913%2053.0759%2012.2213%2053.0759%2013.1435C53.0759%2014.0658%2053.2834%2015.003%2053.8587%2015.6046C54.4335%2016.2061%2055.3202%2016.433%2056.1982%2016.433C57.0762%2016.433%2057.963%2016.2143%2058.5378%2015.6046C58.6179%2015.5186%2058.6894%2015.4248%2058.7608%2015.331H61.1251C60.9171%2016.0657%2060.5897%2016.7299%2060.0945%2017.2454C59.1364%2018.2531%2057.6593%2018.6205%2056.1982%2018.6205C54.7372%2018.6205%2053.2596%2018.2609%2052.3014%2017.2454C51.3432%2016.2299%2050.9919%2014.6828%2050.9919%2013.1435C50.9919%2011.6043%2051.3355%2010.0494%2052.3014%209.04168C53.2678%208.03396%2054.7367%207.66663%2056.1982%207.66663C57.6598%207.66663%2059.1364%208.02618%2060.0945%209.04168C61.061%2010.0572%2061.4045%2011.6043%2061.4045%2013.1435V13.1431Z%22%20fill%3D%22%230f1115%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M80.242%2018.6214C81.7035%2018.6214%2083.1801%2018.4105%2084.1383%2017.809C85.0965%2017.2075%2085.4482%2016.2931%2085.4482%2015.3869C85.4482%2014.4807%2085.1042%2013.5585%2084.1383%2012.9647C83.1801%2012.371%2081.703%2012.1518%2080.242%2012.1518C79.6186%2012.1518%2079.0438%2012.0658%2078.6366%2011.8394C78.2294%2011.6047%2078.0778%2011.2534%2078.0778%2010.9017C78.0778%2010.5499%2078.2216%2010.1908%2078.6366%209.9639C79.0438%209.72921%2079.6749%209.65147%2080.2973%209.65147C80.9198%209.65147%2081.5509%209.73747%2081.9591%209.9639C82.3663%2010.1986%2082.5179%2010.5499%2082.5179%2010.9017H84.9531C84.9531%209.99499%2084.6421%209.07327%2083.7719%208.47951C82.9017%207.88576%2081.5679%207.66663%2080.2424%207.66663C78.9169%207.66663%2077.5837%207.8775%2076.713%208.47951C75.8427%209.08104%2075.5308%209.99499%2075.5308%2010.9017C75.5308%2011.8083%2075.8423%2012.73%2076.713%2013.3238C77.5832%2013.9176%2078.9165%2014.1367%2080.2424%2014.1367C80.929%2014.1367%2081.688%2014.2227%2082.1428%2014.4491C82.5985%2014.676%2082.7579%2015.0351%2082.7579%2015.3869C82.7579%2015.7387%2082.5985%2016.0977%2082.1428%2016.3246C81.688%2016.5511%2080.9931%2016.6371%2080.3066%2016.6371C79.62%2016.6371%2078.9169%2016.5511%2078.4694%2016.3246C78.0224%2016.0982%2077.8543%2015.7387%2077.8543%2015.3869H75.0435C75.0435%2016.2935%2075.3865%2017.2153%2076.3534%2017.809C77.3194%2018.4028%2078.7809%2018.6214%2080.2424%2018.6214H80.242Z%22%20fill%3D%22%230f1115%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M97.4733%2013.1431V13.9948H91.0932V12.2996H95.3252C95.23%2011.6825%2095.006%2011.1043%2094.6071%2010.682C94.0313%2010.0727%2093.1456%209.85409%2092.2666%209.85409C91.3876%209.85409%2090.5018%2010.0727%2089.927%2010.682C89.3522%2011.2913%2089.1452%2012.2213%2089.1452%2013.1435C89.1452%2014.0658%2089.3522%2015.003%2089.927%2015.6046C90.5018%2016.2061%2091.3886%2016.433%2092.2666%2016.433C93.1446%2016.433%2094.0313%2016.2143%2094.6071%2015.6046C94.6863%2015.5186%2094.7587%2015.4248%2094.8301%2015.331H97.1935C96.9855%2016.0657%2096.6585%2016.7299%2096.1639%2017.2454C95.2057%2018.2531%2093.7281%2018.6205%2092.2666%2018.6205C90.805%2018.6205%2089.3284%2018.2609%2088.3703%2017.2454C87.4121%2016.2299%2087.0613%2014.6828%2087.0613%2013.1435C87.0613%2011.6043%2087.4043%2010.0494%2088.3703%209.04168C89.3367%208.03396%2090.806%207.66663%2092.2666%207.66663C93.7272%207.66663%2095.2057%208.02618%2096.1639%209.04168C97.1298%2010.0572%2097.4729%2011.6043%2097.4729%2013.1435L97.4733%2013.1431Z%22%20fill%3D%22%230f1115%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M109.499%2013.1431V13.9948H103.119V12.2996H107.351C107.256%2011.6825%20107.032%2011.1043%20106.632%2010.682C106.057%2010.0727%20105.172%209.85409%20104.293%209.85409C103.414%209.85409%20102.528%2010.0727%20101.953%2010.682C101.378%2011.2913%20101.17%2012.2213%20101.17%2013.1435C101.17%2014.0658%20101.378%2015.003%20101.953%2015.6046C102.528%2016.2061%20103.415%2016.433%20104.293%2016.433C105.171%2016.433%20106.057%2016.2143%20106.632%2015.6046C106.712%2015.5186%20106.784%2015.4248%20106.856%2015.331H109.22C109.012%2016.0657%20108.685%2016.7299%20108.19%2017.2454C107.231%2018.2531%20105.754%2018.6205%20104.293%2018.6205C102.831%2018.6205%20101.355%2018.2609%20100.396%2017.2454C99.4382%2016.2299%2099.0864%2014.6828%2099.0864%2013.1435C99.0864%2011.6043%2099.4295%2010.0494%20100.396%209.04168C101.362%208.03396%20102.832%207.66663%20104.293%207.66663C105.754%207.66663%20107.231%208.02618%20108.19%209.04168C109.156%2010.0572%20109.499%2011.6043%20109.499%2013.1435V13.1431Z%22%20fill%3D%22%230f1115%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M113.5%204.62817H111.104V18.6217H113.5V4.62817Z%22%20fill%3D%22%230f1115%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M117.589%2012.8154L121.517%2018.6208H118.554L114.625%2012.8154L118.554%208.15088H121.517L117.589%2012.8154Z%22%20fill%3D%22%230f1115%22%2F%3E%0A%20%20%20%20%20%20%3Cg%20clip-path%3D%22url%28%23dsh-wordmark-whale-clip%29%22%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M23.0584%204.95203C22.8129%204.83203%2022.7074%205.06103%2022.5639%205.17704C22.5149%205.21454%2022.4734%205.26354%2022.4319%205.30854C22.0734%205.69155%2021.6543%205.94306%2021.1073%205.91306C20.3073%205.86806%2019.6243%206.11957%2019.0203%206.73158C18.8918%205.97706%2018.4652%205.52655%2017.8162%205.23754C17.4767%205.08753%2017.1332%204.93703%2016.8952%204.61052C16.7292%204.37801%2016.6837%204.11901%2016.6007%203.8635C16.5477%203.70949%2016.4952%203.55199%2016.3177%203.52549C16.1252%203.49549%2016.0497%203.65699%2015.9742%203.792C15.6722%204.34401%2015.5552%204.95203%2015.5667%205.56805C15.5932%206.95359%2016.1782%208.05712%2017.3407%208.84215C17.4727%208.93215%2017.5067%209.02215%2017.4652%209.15366C17.3857%209.42416%2017.2917%209.68667%2017.2087%209.95718C17.1557%2010.1297%2017.0767%2010.1677%2016.8917%2010.0922C16.2537%209.82568%2015.7027%209.43117%2015.2156%208.95465C14.3891%208.15513%2013.6416%207.2726%2012.7096%206.58158C12.4906%206.42007%2012.2716%206.27007%2012.045%206.12707C11.094%205.20354%2012.1696%204.44502%2012.4186%204.35501C12.6791%204.26101%2012.5091%203.938%2011.6675%203.942C10.826%203.9455%2010.056%204.22751%209.07446%204.60302C8.93096%204.65952%208.77995%204.70052%208.62545%204.73452C7.73492%204.56552%206.80989%204.52802%205.84386%204.63702C4.02481%204.83953%202.57177%205.69955%201.50373%207.1676C0.220694%208.93215%20-0.0813148%2010.9372%200.288196%2013.0283C0.676708%2015.2323%201.80174%2017.0569%203.53029%2018.4834C5.32285%2019.9625%207.38741%2020.6875%209.74298%2020.5485C11.1735%2020.466%2012.7661%2020.2745%2014.5626%2018.7539C15.0156%2018.9795%2015.4912%2019.0695%2016.2797%2019.137C16.8872%2019.1935%2017.4722%2019.107%2017.9252%2019.013C18.6347%2018.8629%2018.5857%2018.2059%2018.3292%2018.0854C16.2497%2017.1169%2016.7062%2017.5109%2016.2912%2017.1919C17.3477%2015.9419%2018.9618%2013.7198%2019.4598%2010.6942C19.5088%2010.3602%2019.5713%209.88968%2019.5638%209.61917C19.5598%209.45417%2019.5978%209.39016%2019.7863%209.37116C20.3073%209.31116%2020.8128%209.16866%2021.2773%208.91315C22.6249%208.17713%2023.1684%206.96809%2023.2964%205.51905C23.3154%205.29754%2023.2924%205.06853%2023.0584%204.95203ZM11.3165%2017.9954C9.30097%2016.4109%208.32344%2015.8894%207.91992%2015.9119C7.54241%2015.9344%207.61042%2016.3664%207.69342%2016.6479C7.78042%2016.9259%207.89342%2017.1174%208.05193%2017.3614C8.16143%2017.5229%208.23694%2017.7629%207.94243%2017.9434C7.29341%2018.3449%206.16487%2017.8084%206.11187%2017.7819C4.79833%2017.0084%203.7003%2015.9874%202.92628%2014.5908C2.17875%2013.2468%201.74474%2011.8047%201.67324%2010.2657C1.65424%209.89418%201.76374%209.76267%202.13375%209.69517C2.62077%209.60517%203.12278%209.58617%203.6093%209.65767C5.66636%209.95818%207.41741%2010.8777%208.88545%2012.3348C9.72348%2013.1643%2010.3575%2014.1558%2011.0105%2015.1243C11.705%2016.1529%2012.4521%2017.1329%2013.4036%2017.9364C13.7396%2018.2179%2014.0076%2018.4319%2014.2641%2018.5899C13.4906%2018.6764%2012.1996%2018.6949%2011.3165%2017.9964V17.9954ZM12.2826%2011.7817C12.2826%2011.6167%2012.4146%2011.4852%2012.5806%2011.4852C12.6181%2011.4852%2012.6521%2011.4927%2012.6826%2011.5037C12.7241%2011.5187%2012.7621%2011.5412%2012.7921%2011.5752C12.8451%2011.6277%2012.8751%2011.7027%2012.8751%2011.7817C12.8751%2011.9467%2012.7431%2012.0782%2012.5771%2012.0782C12.4111%2012.0782%2012.2826%2011.9467%2012.2826%2011.7817ZM15.2831%2013.3208C15.0906%2013.3998%2014.8981%2013.4673%2014.7131%2013.4748C14.4261%2013.4898%2014.1131%2013.3733%2013.9431%2013.2308C13.6791%2013.0093%2013.4901%2012.8853%2013.4111%2012.4988C13.3771%2012.3338%2013.3961%2012.0782%2013.4261%2011.9317C13.4941%2011.6162%2013.4186%2011.4137%2013.1961%2011.2297C13.0151%2011.0797%2012.7846%2011.0382%2012.5316%2011.0382C12.4371%2011.0382%2012.3506%2010.9967%2012.2861%2010.9632C12.1806%2010.9107%2012.0936%2010.7792%2012.1766%2010.6177C12.2031%2010.5652%2012.3316%2010.4377%2012.3616%2010.4152C12.7051%2010.2197%2013.1011%2010.2837%2013.4676%2010.4302C13.8071%2010.5692%2014.0641%2010.8242%2014.4336%2011.1847C14.8111%2011.6202%2014.8791%2011.7402%2015.0941%2012.0672C15.2641%2012.3228%2015.4186%2012.5853%2015.5247%2012.8858C15.5887%2013.0733%2015.5057%2013.2268%2015.2831%2013.3208Z%22%20fill%3D%22%230f1115%22%2F%3E%0A%20%20%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%20%20%3Crect%20x%3D%22129.348%22%20y%3D%225.5%22%20width%3D%2252%22%20height%3D%2214%22%20rx%3D%222%22%20fill%3D%22%230f1115%22%2F%3E%0A%20%20%20%20%20%20%3Cg%20clip-path%3D%22url%28%23dsh-wordmark-badge-clip%29%22%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M132.848%208.93205H134.08V16.137H132.848V8.93205ZM136.5%208.93205H137.732V16.137H136.5V8.93205ZM133.365%2013.024V11.99H137.193V13.024H133.365Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M140.397%2014.432L140.672%2013.453H143.202L143.532%2014.432H140.397ZM140.287%2016.137H139.055L141.277%208.93205H142.201L142.146%209.74605L140.947%2013.915H140.969L140.287%2016.137ZM145.039%2016.137H143.741L143.07%2013.948L143.081%2013.937L141.871%209.74605L141.926%208.93205H142.817L145.039%2016.137Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M146.846%208.93205H149.068C149.852%208.93205%20150.443%209.11538%20150.839%209.48205C151.235%209.84138%20151.433%2010.3327%20151.433%2010.956C151.433%2011.22%20151.396%2011.4657%20151.323%2011.693C151.249%2011.9204%20151.125%2012.1257%20150.949%2012.309C150.773%2012.4924%20150.531%2012.65%20150.223%2012.782C149.922%2012.9067%20149.541%2013.0057%20149.079%2013.079V13.321H146.846V12.639L148.023%2012.485C148.631%2012.4044%20149.09%2012.298%20149.398%2012.166C149.706%2012.034%20149.915%2011.8764%20150.025%2011.693C150.135%2011.5024%20150.19%2011.2934%20150.19%2011.066C150.19%2010.6994%20150.083%2010.417%20149.871%2010.219C149.658%2010.021%20149.324%209.92205%20148.87%209.92205H146.846V8.93205ZM146.395%208.93205H147.627V16.137H146.395V8.93205ZM151.917%2016.093V16.137H150.366L149.024%2014.322C148.87%2014.1094%20148.73%2013.9407%20148.606%2013.816C148.481%2013.684%20148.345%2013.5887%20148.199%2013.53C148.052%2013.464%20147.872%2013.42%20147.66%2013.398C147.447%2013.3687%20147.176%2013.3504%20146.846%2013.343V13.145H149.079C149.233%2013.211%20149.368%2013.2844%20149.486%2013.365C149.61%2013.4457%20149.735%2013.5447%20149.86%2013.662C149.992%2013.7794%20150.138%2013.937%20150.3%2014.135L151.917%2016.093Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M153.58%209.57005L153.591%208.93205H154.46L157.584%2015.51V16.137H156.704L153.58%209.57005ZM158.024%2016.137H156.968L156.88%208.93205H158.024V16.137ZM154.24%2016.137H153.096V8.93205H154.152L154.24%2016.137Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M159.963%208.93205H161.206V16.137H159.963V8.93205ZM160.095%209.96605V8.93205H164.858V9.96605H160.095ZM160.095%2016.137V15.103H164.902V16.137H160.095ZM160.095%2013.013V11.99H164.374V13.013H160.095Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M169.052%2015.257C169.543%2015.257%20169.895%2015.1654%20170.108%2014.982C170.328%2014.7987%20170.438%2014.5457%20170.438%2014.223C170.438%2014.047%20170.405%2013.8967%20170.339%2013.772C170.273%2013.6474%20170.152%2013.5337%20169.976%2013.431C169.807%2013.321%20169.558%2013.2147%20169.228%2013.112L168.491%2012.881C167.846%2012.6757%20167.38%2012.4044%20167.094%2012.067C166.808%2011.7297%20166.665%2011.3007%20166.665%2010.78C166.665%2010.428%20166.76%2010.1017%20166.951%209.80105C167.142%209.50038%20167.428%209.25838%20167.809%209.07505C168.19%208.89172%20168.663%208.80005%20169.228%208.80005C169.631%208.80005%20169.998%208.82938%20170.328%208.88805C170.665%208.93938%20171.039%209.01638%20171.45%209.11905L171.274%2010.175C170.834%2010.0504%20170.442%209.96238%20170.097%209.91105C169.76%209.85238%20169.463%209.82305%20169.206%209.82305C168.737%209.82305%20168.403%209.90738%20168.205%2010.076C168.007%2010.2374%20167.908%2010.439%20167.908%2010.681C167.908%2010.857%20167.941%2011.0147%20168.007%2011.154C168.073%2011.286%20168.19%2011.407%20168.359%2011.517C168.535%2011.627%20168.784%2011.7334%20169.107%2011.836L169.866%2012.078C170.526%2012.276%20170.995%2012.5327%20171.274%2012.848C171.553%2013.156%20171.692%2013.585%20171.692%2014.135C171.692%2014.5604%20171.589%2014.9344%20171.384%2015.257C171.179%2015.5797%20170.878%2015.8327%20170.482%2016.016C170.093%2016.1994%20169.609%2016.291%20169.03%2016.291C168.627%2016.291%20168.212%2016.247%20167.787%2016.159C167.362%2016.071%20166.9%2015.9427%20166.401%2015.774L166.665%2014.718C167.156%2014.894%20167.6%2015.0297%20167.996%2015.125C168.399%2015.213%20168.751%2015.257%20169.052%2015.257Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M175.809%2015.257C176.3%2015.257%20176.652%2015.1654%20176.865%2014.982C177.085%2014.7987%20177.195%2014.5457%20177.195%2014.223C177.195%2014.047%20177.162%2013.8967%20177.096%2013.772C177.03%2013.6474%20176.909%2013.5337%20176.733%2013.431C176.564%2013.321%20176.315%2013.2147%20175.985%2013.112L175.248%2012.881C174.603%2012.6757%20174.137%2012.4044%20173.851%2012.067C173.565%2011.7297%20173.422%2011.3007%20173.422%2010.78C173.422%2010.428%20173.517%2010.1017%20173.708%209.80105C173.899%209.50038%20174.185%209.25838%20174.566%209.07505C174.947%208.89172%20175.42%208.80005%20175.985%208.80005C176.388%208.80005%20176.755%208.82938%20177.085%208.88805C177.422%208.93938%20177.796%209.01638%20178.207%209.11905L178.031%2010.175C177.591%2010.0504%20177.199%209.96238%20176.854%209.91105C176.517%209.85238%20176.22%209.82305%20175.963%209.82305C175.494%209.82305%20175.16%209.90738%20174.962%2010.076C174.764%2010.2374%20174.665%2010.439%20174.665%2010.681C174.665%2010.857%20174.698%2011.0147%20174.764%2011.154C174.83%2011.286%20174.947%2011.407%20175.116%2011.517C175.292%2011.627%20175.541%2011.7334%20175.864%2011.836L176.623%2012.078C177.283%2012.276%20177.752%2012.5327%20178.031%2012.848C178.31%2013.156%20178.449%2013.585%20178.449%2014.135C178.449%2014.5604%20178.346%2014.9344%20178.141%2015.257C177.936%2015.5797%20177.635%2015.8327%20177.239%2016.016C176.85%2016.1994%20176.366%2016.291%20175.787%2016.291C175.384%2016.291%20174.969%2016.247%20174.544%2016.159C174.119%2016.071%20173.657%2015.9427%20173.158%2015.774L173.422%2014.718C173.913%2014.894%20174.357%2015.0297%20174.753%2015.125C175.156%2015.213%20175.508%2015.257%20175.809%2015.257Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%20%20%3CclipPath%20id%3D%22dsh-wordmark-whale-clip%22%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20width%3D%2223.16%22%20height%3D%2217.0435%22%20fill%3D%22white%22%20transform%3D%22translate%280.141602%203.52185%29%22%2F%3E%0A%20%20%20%20%20%20%20%20%3C%2FclipPath%3E%0A%20%20%20%20%20%20%20%20%3CclipPath%20id%3D%22dsh-wordmark-badge-clip%22%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20width%3D%2246%22%20height%3D%2214%22%20fill%3D%22white%22%20transform%3D%22translate%28132.348%205.5%29%22%2F%3E%0A%20%20%20%20%20%20%20%20%3C%2FclipPath%3E%0A%20%20%20%20%20%20%3C%2Fdefs%3E%0A%3C%2Fsvg%3E") left center / contain no-repeat; }
+.theme-dark .dsg-sidebar-brand::after { background-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20182%2024%22%20fill%3D%22none%22%3E%20%20%20%20%20%20%3Cpath%20d%3D%22M68.416%2018.2447H67.0501V16.1272H68.416C69.2619%2016.1272%2070.1166%2015.9163%2070.6671%2015.3304C71.2181%2014.7444%2071.426%2013.8455%2071.426%2012.9471C71.426%2012.0487%2071.2268%2011.1498%2070.6671%2010.5643C70.1083%209.97831%2069.2619%209.76744%2068.416%209.76744C67.5701%209.76744%2066.7154%209.97831%2066.1639%2010.5643C65.6129%2011.1503%2065.4049%2012.0487%2065.4049%2012.9471V21.6435H63.009V7.6582H65.4049V8.54883H65.8442C65.8918%208.49393%2065.9394%208.44728%2065.9875%208.40064C66.5871%207.85353%2067.5049%207.6582%2068.4072%207.6582C69.8212%207.6582%2071.2341%208.00998%2072.1607%208.98662C73.0868%209.96325%2073.4143%2011.4632%2073.4143%2012.9558C73.4143%2014.4485%2073.0785%2015.9406%2072.1607%2016.925C71.2424%2017.9094%2069.8212%2018.2457%2068.416%2018.2457V18.2447Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M31.9551%208.03497H33.3204V10.1525H31.9551C31.1087%2010.1525%2030.2545%2010.3633%2029.7035%2010.9493C29.1525%2011.5353%2028.945%2012.4342%2028.945%2013.3326C28.945%2014.231%2029.1447%2015.1294%2029.7035%2015.7154C30.2623%2016.3014%2031.1087%2016.5122%2031.9551%2016.5122C32.8015%2016.5122%2033.6562%2016.3014%2034.2072%2015.7154C34.7582%2015.1294%2034.9657%2014.231%2034.9657%2013.3326V4.62842H37.3611V18.6219H34.9657V17.7313H34.5264C34.4783%2017.7857%2034.4307%2017.8329%2034.3826%2017.8795C33.7835%2018.4261%2032.8652%2018.6219%2031.9629%2018.6219C30.5494%2018.6219%2029.136%2018.2707%2028.2099%2017.294C27.2838%2016.3174%2026.9563%2014.817%2026.9563%2013.3248C26.9563%2011.8327%2027.2916%2010.34%2028.2099%209.35561C29.136%208.37898%2030.5494%208.03497%2031.9551%208.03497Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M49.3786%2013.1431V13.9948H42.9984V12.2996H47.2305C47.1348%2011.6825%2046.9113%2011.1043%2046.5119%2010.682C45.9371%2010.0727%2045.0503%209.85409%2044.1723%209.85409C43.2943%209.85409%2042.4076%2010.0727%2041.8328%2010.682C41.258%2011.2913%2041.05%2012.2213%2041.05%2013.1435C41.05%2014.0658%2041.2575%2015.003%2041.8328%2015.6046C42.4076%2016.2061%2043.2939%2016.433%2044.1723%2016.433C45.0508%2016.433%2045.9371%2016.2143%2046.5119%2015.6046C46.5916%2015.5186%2046.6635%2015.4248%2046.7354%2015.331H49.0992C48.8918%2016.0657%2048.5643%2016.7299%2048.0691%2017.2454C47.111%2018.2531%2045.6339%2018.6205%2044.1723%2018.6205C42.7108%2018.6205%2041.2337%2018.2609%2040.2755%2017.2454C39.3174%2016.2299%2038.9661%2014.6828%2038.9661%2013.1435C38.9661%2011.6043%2039.3096%2010.0494%2040.2755%209.04168C41.242%208.03396%2042.7108%207.66663%2044.1723%207.66663C45.6339%207.66663%2047.111%208.02618%2048.0691%209.04168C49.0351%2010.0572%2049.3786%2011.6043%2049.3786%2013.1435V13.1431Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M61.4045%2013.1431V13.9948H55.0243V12.2996H59.2564C59.1602%2011.6825%2058.9372%2011.1043%2058.5378%2010.682C57.963%2010.0727%2057.0762%209.85409%2056.1982%209.85409C55.3202%209.85409%2054.4335%2010.0727%2053.8587%2010.682C53.2839%2011.2913%2053.0759%2012.2213%2053.0759%2013.1435C53.0759%2014.0658%2053.2834%2015.003%2053.8587%2015.6046C54.4335%2016.2061%2055.3202%2016.433%2056.1982%2016.433C57.0762%2016.433%2057.963%2016.2143%2058.5378%2015.6046C58.6179%2015.5186%2058.6894%2015.4248%2058.7608%2015.331H61.1251C60.9171%2016.0657%2060.5897%2016.7299%2060.0945%2017.2454C59.1364%2018.2531%2057.6593%2018.6205%2056.1982%2018.6205C54.7372%2018.6205%2053.2596%2018.2609%2052.3014%2017.2454C51.3432%2016.2299%2050.9919%2014.6828%2050.9919%2013.1435C50.9919%2011.6043%2051.3355%2010.0494%2052.3014%209.04168C53.2678%208.03396%2054.7367%207.66663%2056.1982%207.66663C57.6598%207.66663%2059.1364%208.02618%2060.0945%209.04168C61.061%2010.0572%2061.4045%2011.6043%2061.4045%2013.1435V13.1431Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M80.242%2018.6214C81.7035%2018.6214%2083.1801%2018.4105%2084.1383%2017.809C85.0965%2017.2075%2085.4482%2016.2931%2085.4482%2015.3869C85.4482%2014.4807%2085.1042%2013.5585%2084.1383%2012.9647C83.1801%2012.371%2081.703%2012.1518%2080.242%2012.1518C79.6186%2012.1518%2079.0438%2012.0658%2078.6366%2011.8394C78.2294%2011.6047%2078.0778%2011.2534%2078.0778%2010.9017C78.0778%2010.5499%2078.2216%2010.1908%2078.6366%209.9639C79.0438%209.72921%2079.6749%209.65147%2080.2973%209.65147C80.9198%209.65147%2081.5509%209.73747%2081.9591%209.9639C82.3663%2010.1986%2082.5179%2010.5499%2082.5179%2010.9017H84.9531C84.9531%209.99499%2084.6421%209.07327%2083.7719%208.47951C82.9017%207.88576%2081.5679%207.66663%2080.2424%207.66663C78.9169%207.66663%2077.5837%207.8775%2076.713%208.47951C75.8427%209.08104%2075.5308%209.99499%2075.5308%2010.9017C75.5308%2011.8083%2075.8423%2012.73%2076.713%2013.3238C77.5832%2013.9176%2078.9165%2014.1367%2080.2424%2014.1367C80.929%2014.1367%2081.688%2014.2227%2082.1428%2014.4491C82.5985%2014.676%2082.7579%2015.0351%2082.7579%2015.3869C82.7579%2015.7387%2082.5985%2016.0977%2082.1428%2016.3246C81.688%2016.5511%2080.9931%2016.6371%2080.3066%2016.6371C79.62%2016.6371%2078.9169%2016.5511%2078.4694%2016.3246C78.0224%2016.0982%2077.8543%2015.7387%2077.8543%2015.3869H75.0435C75.0435%2016.2935%2075.3865%2017.2153%2076.3534%2017.809C77.3194%2018.4028%2078.7809%2018.6214%2080.2424%2018.6214H80.242Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M97.4733%2013.1431V13.9948H91.0932V12.2996H95.3252C95.23%2011.6825%2095.006%2011.1043%2094.6071%2010.682C94.0313%2010.0727%2093.1456%209.85409%2092.2666%209.85409C91.3876%209.85409%2090.5018%2010.0727%2089.927%2010.682C89.3522%2011.2913%2089.1452%2012.2213%2089.1452%2013.1435C89.1452%2014.0658%2089.3522%2015.003%2089.927%2015.6046C90.5018%2016.2061%2091.3886%2016.433%2092.2666%2016.433C93.1446%2016.433%2094.0313%2016.2143%2094.6071%2015.6046C94.6863%2015.5186%2094.7587%2015.4248%2094.8301%2015.331H97.1935C96.9855%2016.0657%2096.6585%2016.7299%2096.1639%2017.2454C95.2057%2018.2531%2093.7281%2018.6205%2092.2666%2018.6205C90.805%2018.6205%2089.3284%2018.2609%2088.3703%2017.2454C87.4121%2016.2299%2087.0613%2014.6828%2087.0613%2013.1435C87.0613%2011.6043%2087.4043%2010.0494%2088.3703%209.04168C89.3367%208.03396%2090.806%207.66663%2092.2666%207.66663C93.7272%207.66663%2095.2057%208.02618%2096.1639%209.04168C97.1298%2010.0572%2097.4729%2011.6043%2097.4729%2013.1435L97.4733%2013.1431Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M109.499%2013.1431V13.9948H103.119V12.2996H107.351C107.256%2011.6825%20107.032%2011.1043%20106.632%2010.682C106.057%2010.0727%20105.172%209.85409%20104.293%209.85409C103.414%209.85409%20102.528%2010.0727%20101.953%2010.682C101.378%2011.2913%20101.17%2012.2213%20101.17%2013.1435C101.17%2014.0658%20101.378%2015.003%20101.953%2015.6046C102.528%2016.2061%20103.415%2016.433%20104.293%2016.433C105.171%2016.433%20106.057%2016.2143%20106.632%2015.6046C106.712%2015.5186%20106.784%2015.4248%20106.856%2015.331H109.22C109.012%2016.0657%20108.685%2016.7299%20108.19%2017.2454C107.231%2018.2531%20105.754%2018.6205%20104.293%2018.6205C102.831%2018.6205%20101.355%2018.2609%20100.396%2017.2454C99.4382%2016.2299%2099.0864%2014.6828%2099.0864%2013.1435C99.0864%2011.6043%2099.4295%2010.0494%20100.396%209.04168C101.362%208.03396%20102.832%207.66663%20104.293%207.66663C105.754%207.66663%20107.231%208.02618%20108.19%209.04168C109.156%2010.0572%20109.499%2011.6043%20109.499%2013.1435V13.1431Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M113.5%204.62817H111.104V18.6217H113.5V4.62817Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%3Cpath%20d%3D%22M117.589%2012.8154L121.517%2018.6208H118.554L114.625%2012.8154L118.554%208.15088H121.517L117.589%2012.8154Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%3Cg%20clip-path%3D%22url%28%23dsh-wordmark-whale-clip%29%22%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M23.0584%204.95203C22.8129%204.83203%2022.7074%205.06103%2022.5639%205.17704C22.5149%205.21454%2022.4734%205.26354%2022.4319%205.30854C22.0734%205.69155%2021.6543%205.94306%2021.1073%205.91306C20.3073%205.86806%2019.6243%206.11957%2019.0203%206.73158C18.8918%205.97706%2018.4652%205.52655%2017.8162%205.23754C17.4767%205.08753%2017.1332%204.93703%2016.8952%204.61052C16.7292%204.37801%2016.6837%204.11901%2016.6007%203.8635C16.5477%203.70949%2016.4952%203.55199%2016.3177%203.52549C16.1252%203.49549%2016.0497%203.65699%2015.9742%203.792C15.6722%204.34401%2015.5552%204.95203%2015.5667%205.56805C15.5932%206.95359%2016.1782%208.05712%2017.3407%208.84215C17.4727%208.93215%2017.5067%209.02215%2017.4652%209.15366C17.3857%209.42416%2017.2917%209.68667%2017.2087%209.95718C17.1557%2010.1297%2017.0767%2010.1677%2016.8917%2010.0922C16.2537%209.82568%2015.7027%209.43117%2015.2156%208.95465C14.3891%208.15513%2013.6416%207.2726%2012.7096%206.58158C12.4906%206.42007%2012.2716%206.27007%2012.045%206.12707C11.094%205.20354%2012.1696%204.44502%2012.4186%204.35501C12.6791%204.26101%2012.5091%203.938%2011.6675%203.942C10.826%203.9455%2010.056%204.22751%209.07446%204.60302C8.93096%204.65952%208.77995%204.70052%208.62545%204.73452C7.73492%204.56552%206.80989%204.52802%205.84386%204.63702C4.02481%204.83953%202.57177%205.69955%201.50373%207.1676C0.220694%208.93215%20-0.0813148%2010.9372%200.288196%2013.0283C0.676708%2015.2323%201.80174%2017.0569%203.53029%2018.4834C5.32285%2019.9625%207.38741%2020.6875%209.74298%2020.5485C11.1735%2020.466%2012.7661%2020.2745%2014.5626%2018.7539C15.0156%2018.9795%2015.4912%2019.0695%2016.2797%2019.137C16.8872%2019.1935%2017.4722%2019.107%2017.9252%2019.013C18.6347%2018.8629%2018.5857%2018.2059%2018.3292%2018.0854C16.2497%2017.1169%2016.7062%2017.5109%2016.2912%2017.1919C17.3477%2015.9419%2018.9618%2013.7198%2019.4598%2010.6942C19.5088%2010.3602%2019.5713%209.88968%2019.5638%209.61917C19.5598%209.45417%2019.5978%209.39016%2019.7863%209.37116C20.3073%209.31116%2020.8128%209.16866%2021.2773%208.91315C22.6249%208.17713%2023.1684%206.96809%2023.2964%205.51905C23.3154%205.29754%2023.2924%205.06853%2023.0584%204.95203ZM11.3165%2017.9954C9.30097%2016.4109%208.32344%2015.8894%207.91992%2015.9119C7.54241%2015.9344%207.61042%2016.3664%207.69342%2016.6479C7.78042%2016.9259%207.89342%2017.1174%208.05193%2017.3614C8.16143%2017.5229%208.23694%2017.7629%207.94243%2017.9434C7.29341%2018.3449%206.16487%2017.8084%206.11187%2017.7819C4.79833%2017.0084%203.7003%2015.9874%202.92628%2014.5908C2.17875%2013.2468%201.74474%2011.8047%201.67324%2010.2657C1.65424%209.89418%201.76374%209.76267%202.13375%209.69517C2.62077%209.60517%203.12278%209.58617%203.6093%209.65767C5.66636%209.95818%207.41741%2010.8777%208.88545%2012.3348C9.72348%2013.1643%2010.3575%2014.1558%2011.0105%2015.1243C11.705%2016.1529%2012.4521%2017.1329%2013.4036%2017.9364C13.7396%2018.2179%2014.0076%2018.4319%2014.2641%2018.5899C13.4906%2018.6764%2012.1996%2018.6949%2011.3165%2017.9964V17.9954ZM12.2826%2011.7817C12.2826%2011.6167%2012.4146%2011.4852%2012.5806%2011.4852C12.6181%2011.4852%2012.6521%2011.4927%2012.6826%2011.5037C12.7241%2011.5187%2012.7621%2011.5412%2012.7921%2011.5752C12.8451%2011.6277%2012.8751%2011.7027%2012.8751%2011.7817C12.8751%2011.9467%2012.7431%2012.0782%2012.5771%2012.0782C12.4111%2012.0782%2012.2826%2011.9467%2012.2826%2011.7817ZM15.2831%2013.3208C15.0906%2013.3998%2014.8981%2013.4673%2014.7131%2013.4748C14.4261%2013.4898%2014.1131%2013.3733%2013.9431%2013.2308C13.6791%2013.0093%2013.4901%2012.8853%2013.4111%2012.4988C13.3771%2012.3338%2013.3961%2012.0782%2013.4261%2011.9317C13.4941%2011.6162%2013.4186%2011.4137%2013.1961%2011.2297C13.0151%2011.0797%2012.7846%2011.0382%2012.5316%2011.0382C12.4371%2011.0382%2012.3506%2010.9967%2012.2861%2010.9632C12.1806%2010.9107%2012.0936%2010.7792%2012.1766%2010.6177C12.2031%2010.5652%2012.3316%2010.4377%2012.3616%2010.4152C12.7051%2010.2197%2013.1011%2010.2837%2013.4676%2010.4302C13.8071%2010.5692%2014.0641%2010.8242%2014.4336%2011.1847C14.8111%2011.6202%2014.8791%2011.7402%2015.0941%2012.0672C15.2641%2012.3228%2015.4186%2012.5853%2015.5247%2012.8858C15.5887%2013.0733%2015.5057%2013.2268%2015.2831%2013.3208Z%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%20%20%3Crect%20x%3D%22129.348%22%20y%3D%225.5%22%20width%3D%2252%22%20height%3D%2214%22%20rx%3D%222%22%20fill%3D%22%23f9fafb%22%2F%3E%0A%20%20%20%20%20%20%3Cg%20clip-path%3D%22url%28%23dsh-wordmark-badge-clip%29%22%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M132.848%208.93205H134.08V16.137H132.848V8.93205ZM136.5%208.93205H137.732V16.137H136.5V8.93205ZM133.365%2013.024V11.99H137.193V13.024H133.365Z%22%20fill%3D%22%23151517%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M140.397%2014.432L140.672%2013.453H143.202L143.532%2014.432H140.397ZM140.287%2016.137H139.055L141.277%208.93205H142.201L142.146%209.74605L140.947%2013.915H140.969L140.287%2016.137ZM145.039%2016.137H143.741L143.07%2013.948L143.081%2013.937L141.871%209.74605L141.926%208.93205H142.817L145.039%2016.137Z%22%20fill%3D%22%23151517%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M146.846%208.93205H149.068C149.852%208.93205%20150.443%209.11538%20150.839%209.48205C151.235%209.84138%20151.433%2010.3327%20151.433%2010.956C151.433%2011.22%20151.396%2011.4657%20151.323%2011.693C151.249%2011.9204%20151.125%2012.1257%20150.949%2012.309C150.773%2012.4924%20150.531%2012.65%20150.223%2012.782C149.922%2012.9067%20149.541%2013.0057%20149.079%2013.079V13.321H146.846V12.639L148.023%2012.485C148.631%2012.4044%20149.09%2012.298%20149.398%2012.166C149.706%2012.034%20149.915%2011.8764%20150.025%2011.693C150.135%2011.5024%20150.19%2011.2934%20150.19%2011.066C150.19%2010.6994%20150.083%2010.417%20149.871%2010.219C149.658%2010.021%20149.324%209.92205%20148.87%209.92205H146.846V8.93205ZM146.395%208.93205H147.627V16.137H146.395V8.93205ZM151.917%2016.093V16.137H150.366L149.024%2014.322C148.87%2014.1094%20148.73%2013.9407%20148.606%2013.816C148.481%2013.684%20148.345%2013.5887%20148.199%2013.53C148.052%2013.464%20147.872%2013.42%20147.66%2013.398C147.447%2013.3687%20147.176%2013.3504%20146.846%2013.343V13.145H149.079C149.233%2013.211%20149.368%2013.2844%20149.486%2013.365C149.61%2013.4457%20149.735%2013.5447%20149.86%2013.662C149.992%2013.7794%20150.138%2013.937%20150.3%2014.135L151.917%2016.093Z%22%20fill%3D%22%23151517%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M153.58%209.57005L153.591%208.93205H154.46L157.584%2015.51V16.137H156.704L153.58%209.57005ZM158.024%2016.137H156.968L156.88%208.93205H158.024V16.137ZM154.24%2016.137H153.096V8.93205H154.152L154.24%2016.137Z%22%20fill%3D%22%23151517%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M159.963%208.93205H161.206V16.137H159.963V8.93205ZM160.095%209.96605V8.93205H164.858V9.96605H160.095ZM160.095%2016.137V15.103H164.902V16.137H160.095ZM160.095%2013.013V11.99H164.374V13.013H160.095Z%22%20fill%3D%22%23151517%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M169.052%2015.257C169.543%2015.257%20169.895%2015.1654%20170.108%2014.982C170.328%2014.7987%20170.438%2014.5457%20170.438%2014.223C170.438%2014.047%20170.405%2013.8967%20170.339%2013.772C170.273%2013.6474%20170.152%2013.5337%20169.976%2013.431C169.807%2013.321%20169.558%2013.2147%20169.228%2013.112L168.491%2012.881C167.846%2012.6757%20167.38%2012.4044%20167.094%2012.067C166.808%2011.7297%20166.665%2011.3007%20166.665%2010.78C166.665%2010.428%20166.76%2010.1017%20166.951%209.80105C167.142%209.50038%20167.428%209.25838%20167.809%209.07505C168.19%208.89172%20168.663%208.80005%20169.228%208.80005C169.631%208.80005%20169.998%208.82938%20170.328%208.88805C170.665%208.93938%20171.039%209.01638%20171.45%209.11905L171.274%2010.175C170.834%2010.0504%20170.442%209.96238%20170.097%209.91105C169.76%209.85238%20169.463%209.82305%20169.206%209.82305C168.737%209.82305%20168.403%209.90738%20168.205%2010.076C168.007%2010.2374%20167.908%2010.439%20167.908%2010.681C167.908%2010.857%20167.941%2011.0147%20168.007%2011.154C168.073%2011.286%20168.19%2011.407%20168.359%2011.517C168.535%2011.627%20168.784%2011.7334%20169.107%2011.836L169.866%2012.078C170.526%2012.276%20170.995%2012.5327%20171.274%2012.848C171.553%2013.156%20171.692%2013.585%20171.692%2014.135C171.692%2014.5604%20171.589%2014.9344%20171.384%2015.257C171.179%2015.5797%20170.878%2015.8327%20170.482%2016.016C170.093%2016.1994%20169.609%2016.291%20169.03%2016.291C168.627%2016.291%20168.212%2016.247%20167.787%2016.159C167.362%2016.071%20166.9%2015.9427%20166.401%2015.774L166.665%2014.718C167.156%2014.894%20167.6%2015.0297%20167.996%2015.125C168.399%2015.213%20168.751%2015.257%20169.052%2015.257Z%22%20fill%3D%22%23151517%22%2F%3E%0A%20%20%20%20%20%20%20%20%3Cpath%20d%3D%22M175.809%2015.257C176.3%2015.257%20176.652%2015.1654%20176.865%2014.982C177.085%2014.7987%20177.195%2014.5457%20177.195%2014.223C177.195%2014.047%20177.162%2013.8967%20177.096%2013.772C177.03%2013.6474%20176.909%2013.5337%20176.733%2013.431C176.564%2013.321%20176.315%2013.2147%20175.985%2013.112L175.248%2012.881C174.603%2012.6757%20174.137%2012.4044%20173.851%2012.067C173.565%2011.7297%20173.422%2011.3007%20173.422%2010.78C173.422%2010.428%20173.517%2010.1017%20173.708%209.80105C173.899%209.50038%20174.185%209.25838%20174.566%209.07505C174.947%208.89172%20175.42%208.80005%20175.985%208.80005C176.388%208.80005%20176.755%208.82938%20177.085%208.88805C177.422%208.93938%20177.796%209.01638%20178.207%209.11905L178.031%2010.175C177.591%2010.0504%20177.199%209.96238%20176.854%209.91105C176.517%209.85238%20176.22%209.82305%20175.963%209.82305C175.494%209.82305%20175.16%209.90738%20174.962%2010.076C174.764%2010.2374%20174.665%2010.439%20174.665%2010.681C174.665%2010.857%20174.698%2011.0147%20174.764%2011.154C174.83%2011.286%20174.947%2011.407%20175.116%2011.517C175.292%2011.627%20175.541%2011.7334%20175.864%2011.836L176.623%2012.078C177.283%2012.276%20177.752%2012.5327%20178.031%2012.848C178.31%2013.156%20178.449%2013.585%20178.449%2014.135C178.449%2014.5604%20178.346%2014.9344%20178.141%2015.257C177.936%2015.5797%20177.635%2015.8327%20177.239%2016.016C176.85%2016.1994%20176.366%2016.291%20175.787%2016.291C175.384%2016.291%20174.969%2016.247%20174.544%2016.159C174.119%2016.071%20173.657%2015.9427%20173.158%2015.774L173.422%2014.718C173.913%2014.894%20174.357%2015.0297%20174.753%2015.125C175.156%2015.213%20175.508%2015.257%20175.809%2015.257Z%22%20fill%3D%22%23151517%22%2F%3E%0A%20%20%20%20%20%20%3C%2Fg%3E%0A%20%20%20%20%20%20%3Cdefs%3E%0A%20%20%20%20%20%20%20%20%3CclipPath%20id%3D%22dsh-wordmark-whale-clip%22%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20width%3D%2223.16%22%20height%3D%2217.0435%22%20fill%3D%22white%22%20transform%3D%22translate%280.141602%203.52185%29%22%2F%3E%0A%20%20%20%20%20%20%20%20%3C%2FclipPath%3E%0A%20%20%20%20%20%20%20%20%3CclipPath%20id%3D%22dsh-wordmark-badge-clip%22%3E%0A%20%20%20%20%20%20%20%20%20%20%3Crect%20width%3D%2246%22%20height%3D%2214%22%20fill%3D%22white%22%20transform%3D%22translate%28132.348%205.5%29%22%2F%3E%0A%20%20%20%20%20%20%20%20%3C%2FclipPath%3E%0A%20%20%20%20%20%20%3C%2Fdefs%3E%0A%3C%2Fsvg%3E"); }
+
+/* Harness panel glyphs keep primary ink when hovered or selected. */
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header:is(:hover, .is-active) .workspace-tab-header-inner-icon {
+  color: var(--dsg-ink-primary) !important;
+}
+
+/* Align the brand and new-note button with the 40px Harness top strip. */
+body:not(.is-mobile) .mod-primary-split .dsg-sidebar-header { margin-top: -6px; }
+
+/* The combined Harness wordmark already includes its internal spacing. */
+.dsg-sidebar-brand { gap: 0 !important; }
+
+/* Display the Obsidian app identity in the sidebar header. */
+.dsg-sidebar-brand { gap: 7px !important; }
+.dsg-sidebar-brand::before {
+  content: "";
+  display: block !important;
+  width: 24px;
+  height: 24px;
+  flex: none;
+  -webkit-mask: none !important;
+  mask: none !important;
+  background: url("data:image/png;base64,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") center / contain no-repeat !important;
+}
+.dsg-sidebar-brand::after {
+  content: "Obsidian";
+  display: block;
+  width: auto;
+  height: auto;
+  background: none !important;
+  color: var(--dsg-ink-primary);
+  font-family: var(--dsg-font-ui);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 24px;
+  letter-spacing: 0;
+}
+
+/* Match the original wordmark's monochrome treatment. */
+.dsg-sidebar-brand::before {
+  background: var(--dsg-ink-primary) !important;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22white%22%20d%3D%22M9%201.5%2016%203l5.5%2012.6-5.3%206.6-11.1-1L2.4%2016%205.4%205.3z%22%2F%3E%3Cpath%20fill%3D%22black%22%20d%3D%22m9.1%203%201.1%209.4-4.9%206.2%201.4-12zM10.7%2013l7.8%204.7-3.2%202.8-9.1-.4zM10.5%203.4l4.3%201%204.5%2010.8-7.8-3.9z%22%20opacity%3D%22.34%22%2F%3E%3C%2Fsvg%3E") center / contain no-repeat !important;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cpath%20fill%3D%22white%22%20d%3D%22M9%201.5%2016%203l5.5%2012.6-5.3%206.6-11.1-1L2.4%2016%205.4%205.3z%22%2F%3E%3Cpath%20fill%3D%22black%22%20d%3D%22m9.1%203%201.1%209.4-4.9%206.2%201.4-12zM10.7%2013l7.8%204.7-3.2%202.8-9.1-.4zM10.5%203.4l4.3%201%204.5%2010.8-7.8-3.9z%22%20opacity%3D%22.34%22%2F%3E%3C%2Fsvg%3E") center / contain no-repeat !important;
+}
+.dsg-sidebar-brand::after {
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  font-size: 20px;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+
+.dsg-sidebar-brand::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cdefs%3E%3Cmask%20id%3D%22m%22%20maskUnits%3D%22userSpaceOnUse%22%3E%3Cpath%20fill%3D%22white%22%20d%3D%22M9%201.5%2016%203l5.5%2012.6-5.3%206.6-11.1-1L2.4%2016%205.4%205.3z%22%2F%3E%3Cpath%20fill%3D%22black%22%20d%3D%22M9.1%203%2010.2%2012.4%205.3%2018.6%206.7%206.6zM10.7%2013l7.8%204.7-3.2%202.8-9.1-.4zM10.5%203.4l4.3%201%204.5%2010.8-7.8-3.9z%22%2F%3E%3C%2Fmask%3E%3C%2Fdefs%3E%3Crect%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22white%22%20mask%3D%22url%28%23m%29%22%2F%3E%3C%2Fsvg%3E") !important;
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2024%2024%22%3E%3Cdefs%3E%3Cmask%20id%3D%22m%22%20maskUnits%3D%22userSpaceOnUse%22%3E%3Cpath%20fill%3D%22white%22%20d%3D%22M9%201.5%2016%203l5.5%2012.6-5.3%206.6-11.1-1L2.4%2016%205.4%205.3z%22%2F%3E%3Cpath%20fill%3D%22black%22%20d%3D%22M9.1%203%2010.2%2012.4%205.3%2018.6%206.7%206.6zM10.7%2013l7.8%204.7-3.2%202.8-9.1-.4zM10.5%203.4l4.3%201%204.5%2010.8-7.8-3.9z%22%2F%3E%3C%2Fmask%3E%3C%2Fdefs%3E%3Crect%20width%3D%2224%22%20height%3D%2224%22%20fill%3D%22white%22%20mask%3D%22url%28%23m%29%22%2F%3E%3C%2Fsvg%3E") !important;
+}
+
+/* Official monochrome Obsidian wordmark and crystal, as a single vector. */
+.dsg-sidebar-brand { gap: 0 !important; }
+.dsg-sidebar-brand::before { display: none !important; }
+.dsg-sidebar-brand::after {
+  content: "";
+  display: block;
+  width: 143px;
+  height: 25px;
+  background: var(--dsg-ink-primary) !important;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20143%2025%22%3E%0A%09%3Cpath%20d%3D%22M7%2014.6a12%2012%200%200%201%202.8-.6%2010%2010%200%200%201%20.5-8.8l.4-.7a32.9%2032.9%200%200%200%20.9-2.3v-1c-.1-.4-.3-.7-.7-1.1-.6-.2-1.1%200-1.6.3L4.2%205.1c-.3.2-.5.6-.6%201l-.4%203a14.6%2014.6%200%200%201%203.7%205.5Zm-4-4.2-.1.3-2.8%206c-.2.7-.1%201.4.4%201.9L4.8%2023a8.7%208.7%200%200%200%20.8-8.7c-.7-1.8-1.9-3.2-2.6-4Z%22%20fill%3D%22%23000%22%2F%3E%0A%09%3Cpath%20d%3D%22M5.8%2023.5H6a23.8%2023.8%200%200%201%207.4%201.4c1.2.4%202.3-.5%202.5-1.7a7%207%200%200%201%20.8-2.7c-.8-2-1.6-3.2-2.6-4a5%205%200%200%200-2.9-1.3c-1.6-.2-3%20.2-4%20.5.6%202.3.4%205-1.4%207.8Z%22%20fill%3D%22%23000%22%2F%3E%0A%09%3Cpath%20d%3D%22m17.4%2019.3%202-3c0-.4%200-.7-.2-1a18%2018%200%200%201-2-3.5c-.7-1.4-.7-3.5-.8-4.6%200-.4%200-.7-.3-1l-3.4-4.3v.6L12%204l-.5%201-.3.6A11%2011%200%200%200%2010%209.4c0%201.3%200%202.8.9%204.7h.4c1.1.2%202.3.6%203.5%201.6%201%20.8%201.8%202%202.5%203.6ZM39.8%204.5c-6%200-10.3%203.7-10.3%208.9%200%205.1%204.3%208.9%2010.3%208.9%205.9%200%2010.2-3.8%2010.2-9%200-5-4.3-8.8-10.2-8.8Zm0%203.5c3.5%200%206.1%202.1%206.1%205.4%200%203.2-2.6%205.4-6.1%205.4-3.6%200-6.2-2.2-6.2-5.4%200-3.3%202.6-5.4%206.2-5.4Zm15.7%2012.6c.8.9%202.5%201.7%204.6%201.7%204.3%200%206.8-3%206.8-6.6C67%2012%2064.4%209%2060.1%209c-2.1%200-3.8.8-4.6%201.7v-6h-3.9V22h3.9v-1.4Zm-.1-5c0-2%201.7-3.4%203.9-3.4%202%200%203.9%201.2%203.9%203.5%200%202.2-1.8%203.5-4%203.5-2.1%200-3.8-1.4-3.8-3.4v-.2ZM67.3%2020a11%2011%200%200%200%207.2%202.3c4%200%207-1.5%207-4.4%200-3-2.9-3.5-6.1-3.8-2.8-.4-3.6-.4-3.6-1.1%200-.7.9-1%202.5-1%202%200%203.7.5%204.8%201.6l2-2.3A9.7%209.7%200%200%200%2074.5%209c-4%200-6.5%201.7-6.5%204.3%200%202.7%202.5%203.3%205.6%203.7%202.8.3%204%20.3%204%201.2%200%20.8-1%201.1-2.8%201.1-2.2%200-4.1-.7-5.7-2l-1.8%202.5ZM82.8%208h4V4.9h-4V8Zm3.9%201.4h-3.8V22h3.8V9.4Zm13.1%2011.2V22h3.9V4.8h-3.9v6C99%209.8%2097.4%209%2095.2%209c-4.3%200-6.8%203-6.8%206.6%200%203.6%202.5%206.6%206.8%206.6%202.2%200%203.8-.8%204.6-1.7Zm.1-5v.2c0%202-1.7%203.4-3.9%203.4-2%200-3.9-1.3-3.9-3.5%200-2.3%201.8-3.5%204-3.5%202.1%200%203.8%201.4%203.8%203.4ZM106%208h4V4.9h-4V8Zm3.9%201.4H106V22h3.9V9.4Zm7%2012.9a8%208%200%200%200%205.2-1.7c.6%201.2%202.2%202%205%201.4v-2.8c-1.4.3-1.7%200-1.7-.7v-4.6c0-3.2-2.3-4.8-6.4-4.8-3.5%200-6.2%201.5-7%203.8l3.4%201c.4-1%201.7-1.8%203.5-1.8%202%200%202.8.8%202.8%201.7v.1l-5%20.5c-3%20.3-5.2%201.5-5.2%204%200%202.4%202.2%203.9%205.4%203.9Zm4.8-5.1c0%201.4-2.2%202.3-4.1%202.3-1.5%200-2.4-.5-2.4-1.3s.7-1.1%202-1.3l4.5-.4v.7Zm6.7%204.8h3.8v-6c0-2.2%201.2-3.5%203.3-3.5%202%200%203%201.3%203%203.4V22h3.8v-7.2c0-3.5-2.2-5.7-5.5-5.7-2%200-3.6.8-4.6%201.8V9.4h-3.8V22Z%22%20fill%3D%22%23000%22%2F%3E%0A%3C%2Fsvg%3E%0A") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20143%2025%22%3E%0A%09%3Cpath%20d%3D%22M7%2014.6a12%2012%200%200%201%202.8-.6%2010%2010%200%200%201%20.5-8.8l.4-.7a32.9%2032.9%200%200%200%20.9-2.3v-1c-.1-.4-.3-.7-.7-1.1-.6-.2-1.1%200-1.6.3L4.2%205.1c-.3.2-.5.6-.6%201l-.4%203a14.6%2014.6%200%200%201%203.7%205.5Zm-4-4.2-.1.3-2.8%206c-.2.7-.1%201.4.4%201.9L4.8%2023a8.7%208.7%200%200%200%20.8-8.7c-.7-1.8-1.9-3.2-2.6-4Z%22%20fill%3D%22%23000%22%2F%3E%0A%09%3Cpath%20d%3D%22M5.8%2023.5H6a23.8%2023.8%200%200%201%207.4%201.4c1.2.4%202.3-.5%202.5-1.7a7%207%200%200%201%20.8-2.7c-.8-2-1.6-3.2-2.6-4a5%205%200%200%200-2.9-1.3c-1.6-.2-3%20.2-4%20.5.6%202.3.4%205-1.4%207.8Z%22%20fill%3D%22%23000%22%2F%3E%0A%09%3Cpath%20d%3D%22m17.4%2019.3%202-3c0-.4%200-.7-.2-1a18%2018%200%200%201-2-3.5c-.7-1.4-.7-3.5-.8-4.6%200-.4%200-.7-.3-1l-3.4-4.3v.6L12%204l-.5%201-.3.6A11%2011%200%200%200%2010%209.4c0%201.3%200%202.8.9%204.7h.4c1.1.2%202.3.6%203.5%201.6%201%20.8%201.8%202%202.5%203.6ZM39.8%204.5c-6%200-10.3%203.7-10.3%208.9%200%205.1%204.3%208.9%2010.3%208.9%205.9%200%2010.2-3.8%2010.2-9%200-5-4.3-8.8-10.2-8.8Zm0%203.5c3.5%200%206.1%202.1%206.1%205.4%200%203.2-2.6%205.4-6.1%205.4-3.6%200-6.2-2.2-6.2-5.4%200-3.3%202.6-5.4%206.2-5.4Zm15.7%2012.6c.8.9%202.5%201.7%204.6%201.7%204.3%200%206.8-3%206.8-6.6C67%2012%2064.4%209%2060.1%209c-2.1%200-3.8.8-4.6%201.7v-6h-3.9V22h3.9v-1.4Zm-.1-5c0-2%201.7-3.4%203.9-3.4%202%200%203.9%201.2%203.9%203.5%200%202.2-1.8%203.5-4%203.5-2.1%200-3.8-1.4-3.8-3.4v-.2ZM67.3%2020a11%2011%200%200%200%207.2%202.3c4%200%207-1.5%207-4.4%200-3-2.9-3.5-6.1-3.8-2.8-.4-3.6-.4-3.6-1.1%200-.7.9-1%202.5-1%202%200%203.7.5%204.8%201.6l2-2.3A9.7%209.7%200%200%200%2074.5%209c-4%200-6.5%201.7-6.5%204.3%200%202.7%202.5%203.3%205.6%203.7%202.8.3%204%20.3%204%201.2%200%20.8-1%201.1-2.8%201.1-2.2%200-4.1-.7-5.7-2l-1.8%202.5ZM82.8%208h4V4.9h-4V8Zm3.9%201.4h-3.8V22h3.8V9.4Zm13.1%2011.2V22h3.9V4.8h-3.9v6C99%209.8%2097.4%209%2095.2%209c-4.3%200-6.8%203-6.8%206.6%200%203.6%202.5%206.6%206.8%206.6%202.2%200%203.8-.8%204.6-1.7Zm.1-5v.2c0%202-1.7%203.4-3.9%203.4-2%200-3.9-1.3-3.9-3.5%200-2.3%201.8-3.5%204-3.5%202.1%200%203.8%201.4%203.8%203.4ZM106%208h4V4.9h-4V8Zm3.9%201.4H106V22h3.9V9.4Zm7%2012.9a8%208%200%200%200%205.2-1.7c.6%201.2%202.2%202%205%201.4v-2.8c-1.4.3-1.7%200-1.7-.7v-4.6c0-3.2-2.3-4.8-6.4-4.8-3.5%200-6.2%201.5-7%203.8l3.4%201c.4-1%201.7-1.8%203.5-1.8%202%200%202.8.8%202.8%201.7v.1l-5%20.5c-3%20.3-5.2%201.5-5.2%204%200%202.4%202.2%203.9%205.4%203.9Zm4.8-5.1c0%201.4-2.2%202.3-4.1%202.3-1.5%200-2.4-.5-2.4-1.3s.7-1.1%202-1.3l4.5-.4v.7Zm6.7%204.8h3.8v-6c0-2.2%201.2-3.5%203.3-3.5%202%200%203%201.3%203%203.4V22h3.8v-7.2c0-3.5-2.2-5.7-5.5-5.7-2%200-3.6.8-4.6%201.8V9.4h-3.8V22Z%22%20fill%3D%22%23000%22%2F%3E%0A%3C%2Fsvg%3E%0A") center / contain no-repeat;
+}
+
+/* Quick new-note control beside the macOS collapsed-sidebar opener. */
+.dsg-collapsed-new-note { display: none; }
+body.mod-macos:not(.is-mobile):has(.workspace-split.mod-primary-split.is-sidedock-collapsed) .dsg-collapsed-new-note {
+  position: fixed; top: 11px; left: 124px; z-index: 30;
+  display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; padding: 0; border: 0;
+  border-radius: var(--dsg-radius-sm); box-shadow: none;
+  color: var(--dsg-ink-secondary); background: transparent;
+  -webkit-app-region: no-drag; cursor: pointer;
+}
+body.mod-macos.is-fullscreen:not(.is-mobile):has(.workspace-split.mod-primary-split.is-sidedock-collapsed) .dsg-collapsed-new-note { left: 48px; }
+.dsg-collapsed-new-note:hover { background: var(--dsg-hover) !important; }
+.dsg-collapsed-new-note svg { display: none; }
+.dsg-collapsed-new-note::after { content: ""; width: 16px; height: 16px; background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M2.37091%2011.2501C1.58745%209.89288%201.32067%208.29835%201.61969%206.76006C1.91872%205.22177%202.76342%203.8433%203.99826%202.87846C5.2331%201.91362%206.77494%201.42737%208.33988%201.50925C9.90482%201.59113%2011.3875%202.23562%2012.5149%203.32406C13.6425%204.41269%2014.3387%205.87206%2014.4754%207.4334C14.612%208.99474%2014.18%2010.5529%2013.2587%2011.8209C12.3375%2013.0888%2010.9891%2013.9813%209.46194%2014.3337C8.18691%2014.628%206.85895%2014.5294%205.64989%2014.0605C5.1712%2013.8748%204.76962%2013.4932%204.26534%2013.3967C3.67413%2013.2835%202.95257%2013.5598%202.03794%2014.3337%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M8%205V11%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M5%208H11%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M2.37091%2011.2501C1.58745%209.89288%201.32067%208.29835%201.61969%206.76006C1.91872%205.22177%202.76342%203.8433%203.99826%202.87846C5.2331%201.91362%206.77494%201.42737%208.33988%201.50925C9.90482%201.59113%2011.3875%202.23562%2012.5149%203.32406C13.6425%204.41269%2014.3387%205.87206%2014.4754%207.4334C14.612%208.99474%2014.18%2010.5529%2013.2587%2011.8209C12.3375%2013.0888%2010.9891%2013.9813%209.46194%2014.3337C8.18691%2014.628%206.85895%2014.5294%205.64989%2014.0605C5.1712%2013.8748%204.76962%2013.4932%204.26534%2013.3967C3.67413%2013.2835%202.95257%2013.5598%202.03794%2014.3337%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M8%205V11%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M5%208H11%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E") center / contain no-repeat;
+}
+body.mod-macos:not(.is-mobile):has(.workspace-split.mod-primary-split.is-sidedock-collapsed) .mod-root .workspace-tab-header-container-inner { margin-left: 36px; }
+
+/* Keyboard focus uses the Harness focus-ring width and theme colors. */
+.theme-light .dsg-sidebar-new-note:focus-visible,
+.theme-light .dsg-collapsed-new-note:focus-visible { outline: 2px solid rgb(65, 118, 230); }
+.theme-dark .dsg-sidebar-new-note:focus-visible,
+.theme-dark .dsg-collapsed-new-note:focus-visible { outline: 2px solid rgb(122, 170, 255); }
+
+/* Harness search artwork on Obsidian's search tab. */
+body:not(.is-mobile) .mod-primary-split .workspace-tab-header-inner-icon:has(svg.lucide-search) {
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M6.58727%2011.8586C9.55061%2011.8586%2011.9529%209.45637%2011.9529%206.49304C11.9529%203.5297%209.55061%201.12744%206.58727%201.12744C3.62394%201.12744%201.22168%203.5297%201.22168%206.49304C1.22168%209.45637%203.62394%2011.8586%206.58727%2011.8586Z%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M10.2991%2010.3933L14.7783%2014.8725%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E") center / 16px 16px no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M6.58727%2011.8586C9.55061%2011.8586%2011.9529%209.45637%2011.9529%206.49304C11.9529%203.5297%209.55061%201.12744%206.58727%201.12744C3.62394%201.12744%201.22168%203.5297%201.22168%206.49304C1.22168%209.45637%203.62394%2011.8586%206.58727%2011.8586Z%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M10.2991%2010.3933L14.7783%2014.8725%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E") center / 16px 16px no-repeat;
+}
+body:not(.is-mobile) .mod-primary-split .workspace-tab-header-inner-icon:has(svg.lucide-search) svg { visibility: hidden; }
+
+/* Harness folder artwork on Obsidian's file explorer tab. */
+body:not(.is-mobile) .mod-primary-split .workspace-tab-header-inner-icon:has(svg.lucide-folder-closed) {
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M1.50439%203.11059C1.50439%202.55831%201.95211%202.1106%202.50439%202.1106H5.43389C5.67773%202.1106%205.91318%202.19969%206.09593%202.36113L7.71649%203.79265C7.89924%203.95409%208.1347%204.04319%208.3785%204.04319H13.4958C14.0481%204.04319%2014.4958%204.4909%2014.4958%205.04319V12.8894C14.4958%2013.4417%2014.0481%2013.8894%2013.4958%2013.8894H2.50439C1.95211%2013.8894%201.50439%2013.4417%201.50439%2012.8894V4.04319V3.11059Z%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M3.63501%207.66614H12.3647%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E") center / 16px 16px no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20stroke-width%3D%221%22%3E%3Cpath%20d%3D%22M1.50439%203.11059C1.50439%202.55831%201.95211%202.1106%202.50439%202.1106H5.43389C5.67773%202.1106%205.91318%202.19969%206.09593%202.36113L7.71649%203.79265C7.89924%203.95409%208.1347%204.04319%208.3785%204.04319H13.4958C14.0481%204.04319%2014.4958%204.4909%2014.4958%205.04319V12.8894C14.4958%2013.4417%2014.0481%2013.8894%2013.4958%2013.8894H2.50439C1.95211%2013.8894%201.50439%2013.4417%201.50439%2012.8894V4.04319V3.11059Z%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3Cpath%20d%3D%22M3.63501%207.66614H12.3647%22%20stroke%3D%22black%22%3E%3C%2Fpath%3E%3C%2Fsvg%3E") center / 16px 16px no-repeat;
+}
+body:not(.is-mobile) .mod-primary-split .workspace-tab-header-inner-icon:has(svg.lucide-folder-closed) svg { visibility: hidden; }
+
+/* Reserve space for Obsidian file-type tags while aligning session labels. */
+.workspace-leaf-content[data-type="file-explorer"] .nav-folder:not(.mod-root) .nav-file-title-content {
+  margin-inline-start: 10px;
+  min-width: 0;
+  flex: 1 1 0;
+}
+.workspace-leaf-content[data-type="file-explorer"] .nav-file-tag {
+  flex: none;
+  color: var(--dsg-ink-tertiary) !important;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+/* Harness macOS controls are centered 25px from the window top. */
+body.mod-macos:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header-container .sidebar-toggle-button.mod-primary { top: 11px; }
+body.mod-macos:not(.is-mobile):has(.workspace-split.mod-primary-split.is-sidedock-collapsed) .workspace:not(.is-left-sidedock-open) .sidebar-toggle-button.mod-left { transform: translateY(5px); }
+
+/* On macOS the logo row is part of the draggable window chrome. */
+body.mod-macos:not(.is-mobile) .dsg-sidebar-brand { -webkit-app-region: drag; }
+body.mod-macos:not(.is-mobile) .dsg-sidebar-new-note { -webkit-app-region: no-drag; }
+
+/* Search suggestions share the sidebar palette in both appearance modes. */
+body:not(.is-mobile) .suggestion-container.mod-search-suggestion {
+  color: var(--dsg-ink-primary);
+  /* Avoid nesting a CSS backdrop blur over the macOS vibrancy surface. */
+  background: var(--dsg-sidebar-fill) !important;
+  border: 0.5px solid var(--dsg-hairline) !important;
+  border-radius: var(--dsg-radius-md) !important;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.14);
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+body:not(.is-mobile) .suggestion-container.mod-search-suggestion .suggestion {
+  background: transparent !important;
+}
+body:not(.is-mobile) .suggestion-container.mod-search-suggestion .suggestion-item {
+  color: var(--dsg-ink-primary);
+  border-radius: var(--dsg-radius-sm);
+}
+body:not(.is-mobile) .suggestion-container.mod-search-suggestion .suggestion-item.is-selected {
+  background: var(--dsg-hover) !important;
+}
+body:not(.is-mobile) .suggestion-container.mod-search-suggestion .search-suggest-item.mod-group,
+body:not(.is-mobile) .suggestion-container.mod-search-suggestion .search-suggest-info-text {
+  color: var(--dsg-ink-secondary);
+}
+@media (prefers-reduced-transparency: reduce) {
+  body:not(.is-mobile) .suggestion-container.mod-search-suggestion {
+    background: var(--dsg-sidebar-fill) !important;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* Lay out the workspace tabs as a vertical navigation list. */
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header-container {
+  position: relative; height: auto; width: 100%; flex-direction: column-reverse;
+}
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header-container-inner {
+  display: flex; flex-direction: column; margin-top: var(--header-height);
+  width: 100%; box-sizing: border-box;
+}
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header-spacer { display: none; }
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header-inner-title { display: inline-block; }
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header { width: 100%; }
+body:not(.is-mobile) .mod-primary-split .mod-top .sidebar-toggle-button.mod-primary { position: absolute; top: 0; right: 0; }
+
+/* Align navigation and explorer with the fixed ribbon, including narrow panes. */
+body:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header-container-inner {
+  margin-inline-start: -24px;
+  width: calc(100% + 24px);
+}
+/* Keep the focused search field in the same visual language as sidebar rows. */
+body:not(.is-mobile) .mod-primary-split .search-input-container input:focus {
+  box-shadow: none !important;
+  outline: none !important;
+  border: 1px solid var(--dsg-hairline) !important;
+}
+
+/* Keep the search field visible while its suggestion list is open. */
+body:not(.is-mobile) .suggestion-container.mod-search-suggestion {
+  transform: translateY(100px);
+  max-height: 40vh;
+  overflow-y: auto;
+}
+
+/* Align explorer row icons and labels with the navigation rows above. */
+body:not(.is-mobile) .workspace-leaf-content[data-type="file-explorer"] .nav-files-container {
+  padding-inline-start: calc(var(--dsg-pane-padding) + 8px) !important;
+}
+
+/* Size and place the search list relative to the search field when supported. */
+@supports (anchor-name: --dsg-search) and (position-anchor: --dsg-search) {
+  body:not(.is-mobile) .mod-primary-split .search-input-container {
+    anchor-name: --dsg-search;
+  }
+  body:not(.is-mobile) .suggestion-container.mod-search-suggestion {
+    position: fixed !important;
+    position-anchor: --dsg-search;
+    top: anchor(bottom) !important;
+    left: anchor(left) !important;
+    width: anchor-size(width) !important;
+    max-height: max(100px, calc(100vh - anchor(bottom) - 12px));
+    transform: none;
+  }
+}
+
+/* The default placeholder is too dim on the dark sidebar surface. */
+body.theme-dark:not(.is-mobile) .mod-primary-split .search-input-container input {
+  color: var(--dsg-ink-primary);
+}
+body.theme-dark:not(.is-mobile) .mod-primary-split .search-input-container input::placeholder {
+  color: #adb2b8;
+  opacity: 1;
+}
+
+/* The fullscreen dock starts at a different inset from the windowed dock. */
+body.is-fullscreen:not(.is-mobile) .mod-primary-split .mod-top .workspace-tab-header-container-inner {
+  margin-inline-start: 0;
+  width: 100%;
+}
+
+/* Rainbow Highlight text palette for headings in the editor. */
+body.theme-light .markdown-source-view {
+  --h1-color: #dc2626;
+  --h2-color: #2563eb;
+  --h3-color: #ca8a04;
+  --h4-color: #16a34a;
+  --h5-color: #0891b2;
+  --h6-color: #7c3aed;
+}
+body.theme-dark .markdown-source-view {
+  --h1-color: #f87171;
+  --h2-color: #60a5fa;
+  --h3-color: #facc15;
+  --h4-color: #4ade80;
+  --h5-color: #22d3ee;
+  --h6-color: #a78bfa;
+}
+
+/* Document title in light and dark appearance. */
+body.theme-light { --inline-title-color: #5b21b6; }
+body.theme-dark { --inline-title-color: #a78bfa; }

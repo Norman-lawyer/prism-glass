@@ -1,0 +1,9 @@
+{
+  "id": "deepseek-glass-sidebar",
+  "name": "DeepSeek Glass Sidebar",
+  "version": "0.1.0",
+  "minAppVersion": "1.15.0",
+  "description": "Adds a new-note control to the DeepSeek Glass sidebar.",
+  "author": "Norman",
+  "isDesktopOnly": true
+}

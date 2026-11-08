@@ -18,3 +18,7 @@ This directory is a development preview, not a published release. The live vault
 - Complete an asset provenance and branding review. DeepSeek Harness's MIT license is included; the Minimal license is retained as an audit record while the remaining assets are reviewed.
 - Decide how to distribute the companion plugin; the theme marketplace installs only the theme. Test actual interface-language switching.
 - Prepare a privacy-safe screenshot, finalize license and release metadata, create a public repository and release, then submit the theme for community review.
+
+## Native new-note investigation
+
+In Obsidian 1.15 on macOS, the file explorer leaf stays in the DOM but is `display: none` when Search is active. A CSS-only attempt to expose its action with anchor positioning failed to resolve the anchor and did not produce a usable button. The experiment was reverted. Further testing is required across navigation, collapsed sidebar and window sizes before replacing the companion.

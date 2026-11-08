@@ -1,6 +1,6 @@
 # Prism Glass — release checklist
 
-This directory is a development preview, not a published release. The live vault is using the candidate theme and companion plugin. The theme uses Obsidian's built-in styling as its base; the previous bundled Minimal base was removed.
+This directory is a development preview, not a published release. The live vault is using the candidate theme with the companion plugin disabled. The theme uses Obsidian's built-in styling as its base; the previous bundled Minimal base was removed.
 
 ## Observed locally
 
@@ -22,3 +22,7 @@ This directory is a development preview, not a published release. The live vault
 ## Native new-note investigation
 
 In Obsidian 1.15 on macOS, the file explorer leaf stays in the DOM but is `display: none` when Search is active. A CSS-only attempt to expose its action with anchor positioning failed to resolve the anchor and did not produce a usable button. The experiment was reverted. Further testing is required across navigation, collapsed sidebar and window sizes before replacing the companion.
+
+## Theme-only direction
+
+The large new-note button has been removed by decision; Obsidian's native file explorer button remains. The logo and a CSS hover reveal are available without the companion. The new screenshot reflects this configuration. Further verification is still needed for other platforms, clean installs, narrow and short windows, and tooltip behavior.
